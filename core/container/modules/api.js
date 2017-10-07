@@ -24,13 +24,32 @@ const apiFactory = function (apiBase) {
       }
     );
 
-    return fetch(uri, options).then(res => res.json()).catch((err) => {
-      // console.log(err);
-      var error = new Error(err.toString())
-      error.response = err;
-      return Promise.reject(error);
+    return new Promise(function(resolve, reject) {
+      fetch(uri, options)
+      .then(res => {
+          if (res.ok) {
+            resolve(res.json());
+          } else {
+            var error = {}
+            let msg = ({status, statusText, url}) => {
+              return {
+                status,
+                statusText,
+                url
+              };
+            };
+            Object.assign(error, msg(res));
+            error.traceback = res;
+            reject(error);
+          }
+      })
+      .catch((err) => {
+        // console.log(err);
+        var error = new Error(err.toString())
+        error.response = err;
+        reject(error);
+      });
     });
-  };
 
   // attach shorthands for get, put, post, delete to api
   ['GET', 'PUT', 'POST', 'DELETE'].forEach(function (m) {
