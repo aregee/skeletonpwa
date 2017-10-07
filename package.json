@@ -1,0 +1,22 @@
+{
+  "name": "skeletonpwa",
+  "version": "1.0.0",
+  "description": "Lightweight vanilla javascript Progressive Webapp framework",
+  "main": "core/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vanilla",
+    "pwa",
+    "progressive",
+    "web",
+    "apps",
+    "react",
+    "angular",
+    "vue",
+    "mithril"
+  ],
+  "author": "Rahul Gaur",
+  "license": "MIT"
+}
