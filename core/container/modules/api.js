@@ -1,10 +1,10 @@
-const apiFactory = function (apiBase) {
+const apiFactory = function(apiBase) {
 
   // wrap up request in a bluebird promise with some default
   // options to create the base api function
 
 
-  var api = function (method, url, options = {}) {
+  var api = function(method, url, options = {}) {
     // instantiate options as an empty object literal
     var header = url.indexOf('http') === 0 ? {} : {
       'Content-Type': 'application/json'
@@ -23,15 +23,18 @@ const apiFactory = function (apiBase) {
         headers: options.headers ? options.headers : header
       }
     );
-
     return new Promise(function(resolve, reject) {
       fetch(uri, options)
-      .then(res => {
+        .then(res => {
           if (res.ok) {
             resolve(res.json());
           } else {
             var error = {}
-            let msg = ({status, statusText, url}) => {
+            let msg = ({
+              status,
+              statusText,
+              url
+            }) => {
               return {
                 status,
                 statusText,
@@ -42,25 +45,26 @@ const apiFactory = function (apiBase) {
             error.traceback = res;
             reject(error);
           }
-      })
-      .catch((err) => {
-        // console.log(err);
-        var error = new Error(err.toString())
-        error.response = err;
-        reject(error);
-      });
+        })
+        .catch((err) => {
+          // console.log(err);
+          var error = new Error(err.toString())
+          error.response = err;
+          reject(error);
+        });
     });
 
-  // attach shorthands for get, put, post, delete to api
-  ['GET', 'PUT', 'POST', 'DELETE'].forEach(function (m) {
-    api[m.toLowerCase()] = function (url, options) {
-      return api(m, url, options);
-    };
-  });
 
-  return api;
+    // attach shorthands for get, put, post, delete to api
+    ['GET', 'PUT', 'POST', 'DELETE'].forEach(function(m) {
+      api[m.toLowerCase()] = function(url, options) {
+        return api(m, url, options);
+      };
+    });
+
+    return api;
+  }
 }
-
 
 const onInstance = (container, {
   resolve,
