@@ -43,6 +43,7 @@ const apiFactory = function(apiBase) {
             };
             Object.assign(error, msg(res));
             error.traceback = res;
+            error.message = res.json();
             reject(error);
           }
         })
@@ -53,17 +54,14 @@ const apiFactory = function(apiBase) {
           reject(error);
         });
     });
-
-
-    // attach shorthands for get, put, post, delete to api
-    ['GET', 'PUT', 'POST', 'DELETE'].forEach(function(m) {
-      api[m.toLowerCase()] = function(url, options) {
-        return api(m, url, options);
-      };
-    });
-
-    return api;
   }
+  // attach shorthands for get, put, post, delete to api
+  ['GET', 'PUT', 'POST', 'DELETE'].forEach(function(m) {
+    api[m.toLowerCase()] = function(url, options) {
+      return api(m, url, options);
+    };
+  });
+  return api;
 }
 
 const onInstance = (container, {

@@ -33,7 +33,6 @@ export const GenericView = (superclass) => class extends superclass {
       }
 
       let uri = params.pop();
-      console.log(params);
       let pushState = component.datashop.utils.genUrl(`/${component.urlName}/${component.datashop.utils.reduceParams({args: params[1], url: uri})}`);
       let replaceState = component.datashop.utils.genUrl(`/${component.urlName}/${component.datashop.utils.reduceParams({args: params[1], url: uri})}`);
 
@@ -54,7 +53,6 @@ export const GenericView = (superclass) => class extends superclass {
   }
 
   componentDidUpdate() {
-    console.log(this.viewClassName);
     this.datashop.vent.on([this.viewClassName, 'state', 'update'].join('.'), this.listener.bind(this));
   }
 

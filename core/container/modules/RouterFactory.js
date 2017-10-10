@@ -10,8 +10,6 @@ export class RouterFactory {
       for (let i = 0; i < routes.length; i++) {
         let route = routes[i];
         if (route.test(url)) {
-          console.log("componentFOund");
-          console.log(route);
           resolve(route.component);
           return;
         }
