@@ -56,7 +56,8 @@ const apiFactory = function(apiBase) {
     });
   }
   // attach shorthands for get, put, post, delete to api
-  ['GET', 'PUT', 'POST', 'DELETE'].forEach(function(m) {
+  let methods = ['GET', 'PUT', 'POST', 'DELETE'];
+  methods.forEach(function(m) {
     api[m.toLowerCase()] = function(url, options) {
       return api(m, url, options);
     };
