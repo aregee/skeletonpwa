@@ -26,16 +26,15 @@ ProgressiveEngine.onInstance = function (func) {
 };
 
 
-
-const onInstance = (container, {
-  resolve,
-  reject
-}) => {
-  container.register('Vent', Vent);
-  resolve(container);
-}
-
 const supportVent = (Engine) => {
+  const onInstance = (container, {
+    resolve,
+    reject
+  }) => {
+    container.service('Vent', Vent);
+    Engine.prototype.active = true;
+    resolve(container);
+  }
   Engine.onInstance(onInstance);
 }
 

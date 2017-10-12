@@ -1,10 +1,14 @@
 import {
-  Container
-} from './Container';
+  AppShell
+} from './LazyContainer';
+import {
+  Vent
+} from './modules';
 
-export class ProgressiveEngine extends Container {
-  constructor() {
-    super();
+
+export class ProgressiveEngine extends AppShell {
+  constructor(name) {
+    super(name);
     if (this.active) {
       return;
     }
@@ -12,6 +16,7 @@ export class ProgressiveEngine extends Container {
     this.options = {
       app: 'Datashop'
     }
+    this.vent = new Vent();
 
     this.instanceWaiterProps = [];
     while (ProgressiveEngine.instanceWaiters.length) {
@@ -26,4 +31,5 @@ export class ProgressiveEngine extends Container {
       this.instanceWaiterProps.push(instanceWaiters(this));
     }
   }
+
 }

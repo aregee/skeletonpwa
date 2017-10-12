@@ -16,7 +16,7 @@ export class Container {
       } else {
         this.vent.emit('log.error', {
           msg: `Container error: Service ${service_name} is already bound and override is not allowed. ' +
-          'Pass true as second argument to Container.bind() to allow override.`
+          'Pass true as second argument to Container.register() to allow override.`
         });
         return false;
       }

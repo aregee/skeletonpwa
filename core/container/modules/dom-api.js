@@ -65,10 +65,10 @@ const onInstance = (container, {
   resolve,
   reject
 }) => {
-  container.register('$createElement', rDom);
-  container.register('$window', window);
-  container.register('$domq', document.querySelector);
-  container.register('$document', document);
+  container.service('$createElement', rDom);
+  container.service('$window', window);
+  container.service('$domq', document.querySelector);
+  container.service('$document', document);
   resolve(container);
 }
 

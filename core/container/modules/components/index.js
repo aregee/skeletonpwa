@@ -5,15 +5,28 @@ import {
   VentView
 } from './mixins';
 
+
+
 const onInstance = (container, {
   resolve,
   reject
 }) => {
-  container.register('GenericView', GenericView);
-  container.register('mix', mix);
-  container.register('View', View);
-  container.register('VentView', VentView);
+  container.factory('GenericView', function() {
+    return GenericView;
+  });
+  container.factory('mix', function () {
+    return mix;
+  });
+  container.factory('View', function () {
+    return View
+  });
+  container.factory('VentView', function () {
+    return VentView;
+  });
   resolve(container);
+}
+export {
+  mix
 }
 
 export const supportComponents = (ProgressiveEngine) => {
