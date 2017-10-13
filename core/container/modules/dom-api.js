@@ -65,10 +65,18 @@ const onInstance = (container, {
   resolve,
   reject
 }) => {
-  container.service('$createElement', rDom);
-  container.service('$window', window);
-  container.service('$domq', document.querySelector);
-  container.service('$document', document);
+  container.factory('$createElement', function(container) {
+    return rDom;
+  });
+  container.factory('$window', function (container) {
+    return window;
+  });
+  container.service('$domq', function(container) {
+    return (qs) => document.querySelector(qs);
+  });
+  container.service('$document', function(container) {
+    return document;
+  });
   resolve(container);
 }
 
