@@ -2,7 +2,7 @@ const apiFactory = function(apiBase) {
 
   // wrap up request in a bluebird promise with some default
   // options to create the base api function
-  let apibase = apiBase ? apiBase : window.location.origin;
+  var apibase = apiBase ? apiBase : window.location.origin;
 
   var api = function(method, url, options = {}) {
     // instantiate options as an empty object literal
