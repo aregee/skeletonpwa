@@ -9,15 +9,16 @@ const skeletonEngine = {};
 
 skeletonEngine.shell = function (name, config) {
   if (config) {
-    skeletonPwa.provider(name, function(config) {
-      let skeletonConfig = config;
+    let skeletonConfig = config;
+    skeletonPwa.provider(name, function() {
+
       this.$get =  function (container) {
           const $document = container.$document;
           const apiFactory = container.apiFactory;
           const domApi = container.$createElement;
           const $window = container.$window;
           const _app = {};
-          const viewContainer = config.viewContainer ? config.viewContainer : '.view-container';
+          const viewContainer = skeletonConfig.viewContainer ? skeletonConfig.viewContainer : '.view-container';
 
           _app.utils = {};
           _app.container = skeletonPwa;
