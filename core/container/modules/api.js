@@ -69,7 +69,9 @@ const onInstance = (container, {
   resolve,
   reject
 }) => {
-  container.service('apiFactory', apiFactory);
+  container.factory('apiFactory', function(container) {
+    return apiFactory;
+  });
   resolve(container);
 }
 
