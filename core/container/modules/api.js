@@ -10,7 +10,7 @@ const apiFactory = function(apiBase) {
       'Content-Type': 'application/json'
     };
 
-    let uri = url.indexOf('http') === 0 ? url : apiBase + url;
+    let uri = url.indexOf('http') === 0 ? url : apibase + url;
     Object.assign(
       options, {
 
