@@ -14,6 +14,9 @@ const entry = {
 const output = {
   path: path.resolve('./bundle/'),
   filename: `[name].js`,
+  library: 'skeletonpwa',
+  libraryTarget: 'umd',
+  umdNamedDefine: true
 };
 
 const modules = {
