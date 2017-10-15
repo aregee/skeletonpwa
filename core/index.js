@@ -8,45 +8,46 @@ import {
 const skeletonEngine = {};
 
 
-skeletonEngine.shell = function (name, config) {
+skeletonEngine.shell = function(name, config) {
   if (config) {
     let skeletonConfig = config;
     skeletonPwa.provider(name, function() {
 
-      this.$get =  function (container) {
-          const $document = container.$document;
-          const apiFactory = container.apiFactory;
-          const domApi = container.$createElement;
-          const $window = container.$window;
-          const _app = {};
-          const viewContainer = skeletonConfig.viewContainer ? skeletonConfig.viewContainer : '.view-container';
+      this.$get = function(container) {
+        const $document = container.$document;
+        const apiFactory = container.apiFactory;
+        const domApi = container.$createElement;
+        const $window = container.$window;
+        const _app = {};
+        const viewContainer = skeletonConfig.viewContainer ? skeletonConfig.viewContainer : '.view-container';
 
-          _app.utils = {};
-          _app.container = skeletonPwa;
-          _app.components = {};
-          _app.element = domApi(skeletonConfig.elements);
-          _app.utils.api = apiFactory(skeletonConfig.api);
-          _app.utils.viewContainer = $document.querySelector(viewContainer);
-          _app.components.views =  new Map();
-          _app.vent = skeletonPwa.vent;
-          _app.appRouter = container.state;
-          _app.utils.hooks =  {};
-          function run(cb) {
-            cb(this.app);
-            this.app.vent.emit('engineLoaded', name, core);
-          }
-          let addProvider = (name, providerFunc) => {
-            return skeletonPwa.provider(name, providerFunc);
-          }
+        _app.utils = {};
+        _app.container = skeletonPwa;
+        _app.components = {};
+        _app.element = domApi(skeletonConfig.elements);
+        _app.utils.api = apiFactory(skeletonConfig.api);
+        _app.utils.viewContainer = $document.querySelector(viewContainer);
+        _app.components.views = new Map();
+        _app.vent = skeletonPwa.vent;
+        _app.appRouter = container.state;
+        _app.utils.hooks = {};
 
-          let core = {
-            app: _app
-          };
-          core.run = run.bind(core);
-          core.provider = addProvider.bind(null);
-          return core;
+        function run(cb) {
+          cb(this.app);
+          this.app.vent.emit('engineLoaded', name, core);
+        }
+        let addProvider = (app, name, providerFunc) => {
+          return app.provider(name, providerFunc);
+        }
+
+        let core = {
+          app: _app
+        };
+        core.run = run.bind(core);
+        core.provider = addProvider.bind(null, skeletonPwa);
+        return core;
       }
-  });
+    });
     return skeletonPwa.container[name];
   } else {
     return skeletonPwa.container[name];
