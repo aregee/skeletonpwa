@@ -71,10 +71,10 @@ const onInstance = (container, {
   container.factory('$window', function (container) {
     return window;
   });
-  container.service('$domq', function(container) {
+  container.factory('$domq', function(container) {
     return (qs) => document.querySelector(qs);
   });
-  container.service('$document', function(container) {
+  container.factory('$document', function(container) {
     return document;
   });
   resolve(container);

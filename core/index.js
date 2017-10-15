@@ -7,6 +7,7 @@ import {
 
 const skeletonEngine = {};
 
+
 skeletonEngine.shell = function (name, config) {
   if (config) {
     let skeletonConfig = config;
@@ -28,18 +29,21 @@ skeletonEngine.shell = function (name, config) {
           _app.utils.viewContainer = $document.querySelector(viewContainer);
           _app.components.views =  new Map();
           _app.vent = skeletonPwa.vent;
-          _app.appRouter = skeletonPwa.container.appRouter;
+          _app.appRouter = container.state;
           _app.utils.hooks =  {};
           function run(cb) {
-
             cb(this.app);
             this.app.vent.emit('engineLoaded', name, core);
+          }
+          let addProvider = (name, providerFunc) => {
+            return skeletonPwa.provider(name, providerFunc);
           }
 
           let core = {
             app: _app
           };
           core.run = run.bind(core);
+          core.provider = addProvider.bind(null);
           return core;
       }
   });
