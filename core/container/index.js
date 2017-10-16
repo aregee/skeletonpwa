@@ -7,7 +7,8 @@ import {
   supportApi,
   supportRouterFactory,
   supportComponents,
-  Vent
+  Vent,
+  mix
 } from './modules';
 
 
@@ -32,6 +33,9 @@ const supportVent = (Engine) => {
     reject
   }) => {
     container.service('$vent', Vent);
+    container.service('mix', function () {
+      return mix;
+    });
     Engine.prototype.active = true;
     resolve(container);
   }
