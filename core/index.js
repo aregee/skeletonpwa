@@ -40,7 +40,7 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
   return core;
 }
 
-skeletonEngine.shell = function(name, config) {
+skeletonEngine.bootstrap = function(name, config) {
   if (config) {
     let skeletonConfig = config;
     skeletonPwa.provider(name, function() {
@@ -59,7 +59,7 @@ skeletonEngine.shell = function(name, config) {
   return skeletonPwa.container[name];
 }
 
-skeletonEngine.bootstrap = function(name) {
+skeletonEngine.shell = function(name) {
   let inst = skeletonPwa.container[name];
   if (inst) {
     return inst;
