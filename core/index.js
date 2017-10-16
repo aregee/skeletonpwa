@@ -64,7 +64,11 @@ skeletonEngine.shell = function(name) {
   if (inst) {
     return inst;
   }
-  throw new Error(`${name} not init`);
+  let addProvider = (app, name, providerFunc) => {
+    return app.provider(name, providerFunc);
+  }
+  return addProvider.bind(null, skeletonPwa);
+  // throw new Error(`${name} not init`);
 }
 
 export {
