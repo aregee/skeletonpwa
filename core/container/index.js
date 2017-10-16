@@ -32,7 +32,9 @@ const supportVent = (Engine) => {
     resolve,
     reject
   }) => {
-    container.service('$vent', Vent);
+    container.service('$vent', function () {
+      return Vent;
+    });
     container.service('mix', function () {
       return mix;
     });
