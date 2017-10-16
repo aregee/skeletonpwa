@@ -1,4 +1,4 @@
-import { mix } from './modules/components';
+import { mix } from './modules';
 
 import { ProgressiveEngineShell, ProviderMixin, FactoryMixin, DecorateMixin, ConstantMixin, MiddlewareMixin, ValueMixin } from './interfaces';
 

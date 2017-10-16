@@ -53,7 +53,7 @@ export const FactoryMixin = (superclass) => class extends superclass {
    */
   instanceFactory(name, Factory) {
     return this.factory.call(this, name, function GenericInstanceFactory(container) {
-      console.log(container);
+      
       return {
         instance: Factory.bind(Factory, container)
       };

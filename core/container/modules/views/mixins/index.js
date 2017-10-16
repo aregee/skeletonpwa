@@ -4,9 +4,7 @@ import {
 import {
   View
 } from './View';
-import {
-  mix
-} from './mixin';
+
 import {
   VentView
 } from './Ventedview';
@@ -14,6 +12,5 @@ import {
 export {
   View,
   GenericView,
-  mix,
   VentView
 }

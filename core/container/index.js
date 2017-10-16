@@ -31,7 +31,7 @@ const supportVent = (Engine) => {
     resolve,
     reject
   }) => {
-    container.service('Vent', Vent);
+    container.service('$vent', Vent);
     Engine.prototype.active = true;
     resolve(container);
   }

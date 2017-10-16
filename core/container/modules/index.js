@@ -14,12 +14,15 @@ import {
 
 import {
   supportComponents
-} from './components';
+} from './views';
+
+import { mix } from './mixin';
 
 export {
   supportApi,
   supportDomApi,
   supportRouterFactory,
   supportComponents,
-  Vent
+  Vent,
+  mix
 }

@@ -1,5 +1,4 @@
 import {
-  mix,
   GenericView,
   View,
   VentView
@@ -11,22 +10,17 @@ const onInstance = (container, {
   resolve,
   reject
 }) => {
-  container.factory('GenericView', function() {
+  container.service('GenericView', function() {
     return GenericView;
   });
-  container.factory('mix', function () {
-    return mix;
+  container.service('View', function () {
+    return View;
   });
-  container.factory('View', function () {
-    return View
-  });
-  container.factory('VentView', function () {
+  container.service('VentView', function () {
     return VentView;
   });
+
   resolve(container);
-}
-export {
-  mix
 }
 
 export const supportComponents = (ProgressiveEngine) => {

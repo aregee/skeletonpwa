@@ -2,7 +2,7 @@
 
 
 export const supportRouterFactory = (ProgressiveEngine) => {
-  class RouterFactory {
+  class RouterService {
     constructor(routes=[]) {
       this.routes = routes;
     }
@@ -59,11 +59,7 @@ export const supportRouterFactory = (ProgressiveEngine) => {
     reject
   }) => {
 
-    container.factory('state', function() {
-
-    // this is the service factory.
-      return new RouterFactory();
-    });
+    container.service('state', RouterService);
     resolve(container);
   }
   ProgressiveEngine.onInstance(onInstance);

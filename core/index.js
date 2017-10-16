@@ -6,7 +6,39 @@ import {
 
 
 const skeletonEngine = {};
+window.skeletonPwa = skeletonPwa;
+window.skeletonEngine = skeletonEngine;
+const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, state, domApi, apiFactory) {
 
+  const _app = {};
+  const viewContainer = skeletonconfig.viewContainer ? skeletonconfig.viewContainer : '.view-container';
+
+  _app.utils = {};
+  _app.core = skeletonpwa;
+  _app.components = {};
+  _app.element = domApi(skeletonconfig.elements);
+  _app.utils.api = apiFactory(skeletonconfig.api);
+  _app.utils.viewContainer = $document.querySelector(viewContainer);
+  _app.components.views = new Map();
+  _app.vent = skeletonpwa.vent;
+  _app.appRouter = state;
+  _app.utils.hooks = {};
+
+  function run(cb) {
+    cb(this.app);
+    this.app.vent.emit('engineLoaded', name, this);
+  }
+  let addProvider = (app, name, providerFunc) => {
+    return app.provider(name, providerFunc);
+  }
+
+  let core = {
+    app: _app
+  };
+  core.run = run.bind(core);
+  core.provider = addProvider.bind(null, skeletonpwa);
+  return core;
+}
 
 skeletonEngine.shell = function(name, config) {
   if (config) {
@@ -15,44 +47,24 @@ skeletonEngine.shell = function(name, config) {
 
       this.$get = function(container) {
         const $document = container.$document;
-        const apiFactory = container.apiFactory;
+        const apiFactory = container.http;
         const domApi = container.$createElement;
         const $window = container.$window;
-        const _app = {};
-        const viewContainer = skeletonConfig.viewContainer ? skeletonConfig.viewContainer : '.view-container';
-
-        _app.utils = {};
-        _app.container = skeletonPwa;
-        _app.components = {};
-        _app.element = domApi(skeletonConfig.elements);
-        _app.utils.api = apiFactory(skeletonConfig.api);
-        _app.utils.viewContainer = $document.querySelector(viewContainer);
-        _app.components.views = new Map();
-        _app.vent = skeletonPwa.vent;
-        _app.appRouter = container.state;
-        _app.utils.hooks = {};
-
-        function run(cb) {
-          cb(this.app);
-          this.app.vent.emit('engineLoaded', name, core);
-        }
-        let addProvider = (app, name, providerFunc) => {
-          return app.provider(name, providerFunc);
-        }
-
-        let core = {
-          app: _app
-        };
-        core.run = run.bind(core);
-        core.provider = addProvider.bind(null, skeletonPwa);
-        return core;
+        const state = container.state;
+        return new CoreApp(skeletonPwa, skeletonConfig, $document, state, domApi, apiFactory);
       }
     });
-    return skeletonPwa.container[name];
-  } else {
-    return skeletonPwa.container[name];
+    return this;
   }
+  return skeletonPwa.container[name];
+}
 
+skeletonEngine.bootstrap = function(name) {
+  let inst = skeletonPwa.container[name];
+  if (inst) {
+    return inst;
+  }
+  throw new Error(`${name} not init`);
 }
 
 export {
