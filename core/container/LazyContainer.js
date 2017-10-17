@@ -41,7 +41,7 @@ export class AppShell extends mix(ProgressiveEngineShell).with(ProviderMixin, Fa
    */
   getNested(obj, prop) {
     let service = obj[prop];
-    if (service === undefined && this.globalConfig.strict) {
+    if (service === undefined && this.config.strict) {
       throw new Error('Container was unable to resolve a service.  `' + prop + '` is undefined.');
     }
     return service;
