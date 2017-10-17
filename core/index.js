@@ -24,6 +24,56 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
   _app.appRouter = state;
   _app.datastore = datastore;
   _app.utils.hooks = {};
+  let forPage = (ack) => {
+    let init = () => 'partials[]=';
+    let accu = ack ? ack : '';
+    return {
+      tpl: init,
+      val: accu
+    };
+  }
+
+  let urlParams = (params = []) => (scope) => {
+    return params.reduce((all, t) => {
+      //     console.log(all.tpl())
+      if (all.val === '') {
+        all.val = all.val + all.tpl() + t;
+        return all;
+      } else {
+        all.val = `${all.val}&${all.tpl()}${t}`;
+        return all;
+      }
+    }, scope);
+  }
+
+  let uri = ({
+    val
+  }) => val;
+  let genUrl = (base, params = []) => uri(urlParams(params)(forPage(base)));
+  _app.utils.genUrl = genUrl;
+
+  let baseReduce = (o) => {
+    let ocom = Object.keys(o).reduce(function(out, key) {
+      out.push({
+        key: key,
+        val: o[key]
+      });
+      return out;
+    }, []); // [{key: 'a', value: 1}, {key: 'b', value: 2}, {key: 'c', value: 3}]
+    return ocom;
+  }
+
+  let reduceParams = (base) => (params) => {
+    //  @parms({args: temp1[1], url: 'foo' })
+    return params.url + base(params.args).reduce(function(res, obj) {
+      if (obj.val === null || obj.key === '') {
+        return res;
+      }
+      return res + '?' + '&' + obj.key + '=' + obj.val;
+    }, '');
+  };
+
+  _app.utils.reduceParams = reduceParams(baseReduce);
 
   function run(cb) {
     cb(this.app);
