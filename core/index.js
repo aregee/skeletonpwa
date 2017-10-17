@@ -8,7 +8,7 @@ import {
 const skeletonEngine = {};
 window.skeletonPwa = skeletonPwa;
 window.skeletonEngine = skeletonEngine;
-const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, state, domApi, apiFactory) {
+const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, state, domApi, apiFactory, datastore) {
 
   const _app = {};
   const viewContainer = skeletonconfig.viewContainer ? skeletonconfig.viewContainer : '.view-container';
@@ -22,6 +22,7 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
   _app.components.views = new Map();
   _app.vent = skeletonpwa.vent;
   _app.appRouter = state;
+  _app.datastore = datastore;
   _app.utils.hooks = {};
 
   function run(cb) {
@@ -51,7 +52,12 @@ skeletonEngine.bootstrap = function(name, config) {
         const domApi = container.$createElement;
         const $window = container.$window;
         const state = container.state;
-        return new CoreApp(skeletonPwa, skeletonConfig, $document, state, domApi, apiFactory);
+        const datastore = {};
+        datastore.$name = 'datastore';
+        datastore.$type = 'service';
+        datastore.$value = Map;
+        container.$register(datastore);
+        return new CoreApp(skeletonPwa, skeletonConfig, $document, state, domApi, apiFactory, container.datastore);
       }
     });
     return this;
