@@ -64,7 +64,7 @@ export class AppShell extends mix(ProgressiveEngineShell).with(ProviderMixin, Fa
    * @return Service
    */
   getNestedService(fullname) {
-    return fullname.split('.').reduce(this.getNested, this);
+    return fullname.split('.').reduce(this.getNested.bind(this), this);
   }
 
 
