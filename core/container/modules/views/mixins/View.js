@@ -4,12 +4,12 @@ export class View {
     urlName,
     routeParams,
     dom,
-    core
+    app
   ) {
     this.viewClassName = viewClassName;
     this.urlName = urlName;
     this.routeParams = routeParams;
-    this.core = core;
+    this.app = app;
     this.dom = dom;
     this.template = null;
   }

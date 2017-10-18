@@ -5,9 +5,9 @@ export const GenericView = (superclass) => class extends superclass {
     urlName,
     routeParams,
     dom,
-    core
+    app
   ) {
-    super(viewClassName, urlName, routeParams, dom, core);
+    super(viewClassName, urlName, routeParams, dom, app);
     this.genericPanel = [];
 
   }
@@ -30,8 +30,8 @@ export const GenericView = (superclass) => class extends superclass {
       }
 
       let uri = params.pop();
-      let pushState = component.core.utils.genUrl(`/${component.urlName}/${component.core.utils.reduceParams({args: params[1], url: uri})}`);
-      let replaceState = component.core.utils.genUrl(`/${component.urlName}/${component.core.utils.reduceParams({args: params[1], url: uri})}`);
+      let pushState = component.app.utils.genUrl(`/${component.urlName}/${component.app.utils.reduceParams({args: params[1], url: uri})}`);
+      let replaceState = component.app.utils.genUrl(`/${component.urlName}/${component.app.utils.reduceParams({args: params[1], url: uri})}`);
 
       try {
         window.history.pushState(dst(params[2]), params[3], pushState);
