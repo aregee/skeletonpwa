@@ -117,7 +117,8 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
     app: _app
   };
   core.run = run.bind(core);
-  let coreapi = Object.assign({}, core, coreapi);
+  console.log(coreApi);
+  let coreapi = Object.assign({}, core, coreApi);
   return coreapi;
 }
 
