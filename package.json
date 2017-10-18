@@ -1,6 +1,6 @@
 {
   "name": "skeletonpwa",
-  "version": "1.0.1-28",
+  "version": "1.0.1-29",
   "description": "Lightweight vanilla javascript Progressive Webapp framework",
   "main": "bundle/index.js",
   "scripts": {
