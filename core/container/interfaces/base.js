@@ -1,8 +1,8 @@
 
-export class ProgressiveEngineShell {
+export class Container {
   constructor(name) {
-    if (!(this instanceof ProgressiveEngineShell)) {
-      return ProgressiveEngineShell.module(name);
+    if (!(this instanceof Container)) {
+      return Container.module(name);
     }
   }
 }

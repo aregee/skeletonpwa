@@ -83,11 +83,34 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
     return app.provider(name, providerFunc);
   }
 
+  let addService = (app, name, providerFunc) => {
+    return app.provider(name, providerFunc);
+  }
+  let addFactory = (app, name, factoryFunc) => {
+    return app.factory(name, factoryFunc);
+  }
+  let addConstant = (app, name, constantFunc) => {
+    return app.constant(name, constantFunc);
+  }
+  let addValue = (app, name, valueFunc) => {
+    return app.value(name, valueFunc);
+  }
+
+  let addMiddleWare = (app, name, middlewareFunc) => {
+    return app.middleware(name, middlewareFunc);
+  }
+
+
   let core = {
     app: _app
   };
   core.run = run.bind(core);
   core.provider = addProvider.bind(null, skeletonpwa);
+  core.service = addService.bind(null, skeletonpwa);
+  core.factory = addFactory.bind(null, skeletonpwa);
+  core.middleware = addMiddleWare.bind(null, skeletonpwa);
+  core.value = addValue.bind(null, skeletonpwa);
+  core.constant = addConstant.bind(null, skeletonpwa);
   return core;
 }
 

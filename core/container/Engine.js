@@ -14,7 +14,7 @@ export class ProgressiveEngine extends AppShell {
     }
     ProgressiveEngine.Singleton = this;
     this.options = {
-      app: 'Datashop'
+      app: 'skeleton'
     }
     this.vent = new Vent();
 

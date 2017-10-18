@@ -1,11 +1,11 @@
 import { mix } from './modules';
 
-import { ProgressiveEngineShell, ProviderMixin, FactoryMixin, DecorateMixin, ConstantMixin, MiddlewareMixin, ValueMixin } from './interfaces';
+import { Container, ProviderMixin, FactoryMixin, DecorateMixin, ConstantMixin, MiddlewareMixin, ValueMixin } from './interfaces';
 
 
 const uuid = a=>a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, uuid);
 
-export class AppShell extends mix(ProgressiveEngineShell).with(ProviderMixin, FactoryMixin, DecorateMixin, ConstantMixin, ValueMixin, MiddlewareMixin) {
+export class AppShell extends mix(Container).with(ProviderMixin, FactoryMixin, DecorateMixin, ConstantMixin, ValueMixin, MiddlewareMixin) {
   constructor(name) {
     super(name);
     this.config = {

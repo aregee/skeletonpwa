@@ -4,12 +4,12 @@ export class View {
     urlName,
     routeParams,
     dom,
-    datashop
+    core
   ) {
     this.viewClassName = viewClassName;
     this.urlName = urlName;
     this.routeParams = routeParams;
-    this.datashop = datashop;
+    this.core = core;
     this.dom = dom;
     this.template = null;
   }

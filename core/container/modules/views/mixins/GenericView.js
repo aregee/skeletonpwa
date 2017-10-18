@@ -1,6 +1,3 @@
-//
-// datashop.vent.on('ngState', angularStatelistener);
-
 
 export const GenericView = (superclass) => class extends superclass {
   constructor(
@@ -8,9 +5,9 @@ export const GenericView = (superclass) => class extends superclass {
     urlName,
     routeParams,
     dom,
-    datashop
+    core
   ) {
-    super(viewClassName, urlName, routeParams, dom, datashop);
+    super(viewClassName, urlName, routeParams, dom, core);
     this.genericPanel = [];
 
   }
@@ -33,8 +30,8 @@ export const GenericView = (superclass) => class extends superclass {
       }
 
       let uri = params.pop();
-      let pushState = component.datashop.utils.genUrl(`/${component.urlName}/${component.datashop.utils.reduceParams({args: params[1], url: uri})}`);
-      let replaceState = component.datashop.utils.genUrl(`/${component.urlName}/${component.datashop.utils.reduceParams({args: params[1], url: uri})}`);
+      let pushState = component.core.utils.genUrl(`/${component.urlName}/${component.core.utils.reduceParams({args: params[1], url: uri})}`);
+      let replaceState = component.core.utils.genUrl(`/${component.urlName}/${component.core.utils.reduceParams({args: params[1], url: uri})}`);
 
       try {
         window.history.pushState(dst(params[2]), params[3], pushState);
@@ -53,7 +50,7 @@ export const GenericView = (superclass) => class extends superclass {
   }
 
   componentDidUpdate() {
-    this.datashop.vent.on([this.viewClassName, 'state', 'update'].join('.'), this.listener.bind(this));
+    this.core.vent.on([this.viewClassName, 'state', 'update'].join('.'), this.listener.bind(this));
   }
 
   createFirstTemplate() {
