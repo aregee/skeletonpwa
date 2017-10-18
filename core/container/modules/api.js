@@ -20,14 +20,18 @@ const apiFactory = function(apiBase) {
         // if the url starts with 'http', leave it be, otherwise
         // prefix api_base to the url
         // if the url starts with http, leave headers be
-        headers: options.headers ? options.headers : header
+        headers: options.headers ? options.headers : header,
+        isJson: options.isJson ? options.isJson : true
       }
     );
     return new Promise(function(resolve, reject) {
       fetch(uri, options)
         .then(res => {
           if (res.ok) {
-            resolve(res.json());
+            if (options.isJson) {
+              resolve(res.json());
+            }
+            resolve(res);
           } else {
             var error = {}
             let msg = ({
