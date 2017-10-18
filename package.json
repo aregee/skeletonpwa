@@ -30,5 +30,8 @@
     "copy-webpack-plugin": "^4.0.1",
     "webpack": "^3.7.1",
     "webpack-dev-server": "^1.16.5"
+  },
+  "dependencies": {
+    "svg-url-loader": "^2.2.0"
   }
 }

@@ -1,4 +1,4 @@
-
+let loadingbg = require('svg-url-loader?iesafe!./loadingheart.svg');
 export const GenericView = (superclass) => class extends superclass {
   constructor(
     viewClassName,
@@ -14,7 +14,7 @@ export const GenericView = (superclass) => class extends superclass {
 
   listener(...args) {
 
-    let fn = function (component, ...params) {
+    let fn = function(component, ...params) {
       let dst = ({
         controller,
         data,
@@ -56,7 +56,9 @@ export const GenericView = (superclass) => class extends superclass {
   createFirstTemplate() {
     return this.dom.div({
       className: this.viewClassName
-    }, `<div class="content-loading">Loading content...</div>`);
+    }, [this.dom.div({
+      className: 'content-loading'
+    }, [`Loading content...`, this.dom.div({}, [loadingbg])])]);
   }
 
   createOfflineTemplate() {
