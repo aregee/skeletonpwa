@@ -8,7 +8,40 @@ import {
 const skeletonEngine = {};
 window.skeletonPwa = skeletonPwa;
 window.skeletonEngine = skeletonEngine;
-const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, state, domApi, apiFactory, datastore) {
+
+skeletonPwa.factory('coreApi', function (container) {
+  let addProvider = (app, name, providerFunc) => {
+    return app.provider(name, providerFunc);
+  }
+
+  let addService = (app, name, providerFunc) => {
+    return app.provider(name, providerFunc);
+  }
+  let addFactory = (app, name, factoryFunc) => {
+    return app.factory(name, factoryFunc);
+  }
+  let addConstant = (app, name, constantFunc) => {
+    return app.constant(name, constantFunc);
+  }
+  let addValue = (app, name, valueFunc) => {
+    return app.value(name, valueFunc);
+  }
+
+  let addMiddleWare = (app, name, middlewareFunc) => {
+    return app.middleware(name, middlewareFunc);
+  }
+  let api = {};
+  api.provider = addProvider.bind(null, skeletonPwa);
+  api.service = addService.bind(null, skeletonPwa);
+  api.factory = addFactory.bind(null, skeletonPwa);
+  api.middleware = addMiddleWare.bind(null, skeletonPwa);
+  api.value = addValue.bind(null, skeletonPwa);
+  api.constant = addConstant.bind(null, skeletonPwa);
+  return api;
+});
+
+
+const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, state, domApi, apiFactory, datastore, coreApi) {
 
   const _app = {};
   const viewContainer = skeletonconfig.viewContainer ? skeletonconfig.viewContainer : '.view-container';
@@ -77,41 +110,15 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
 
   function run(cb) {
     cb(this.app);
-    this.app.vent.emit('engineLoaded', name, this);
+    this.app.vent.emit('engineLoaded', name, this.app);
   }
-  let addProvider = (app, name, providerFunc) => {
-    return app.provider(name, providerFunc);
-  }
-
-  let addService = (app, name, providerFunc) => {
-    return app.provider(name, providerFunc);
-  }
-  let addFactory = (app, name, factoryFunc) => {
-    return app.factory(name, factoryFunc);
-  }
-  let addConstant = (app, name, constantFunc) => {
-    return app.constant(name, constantFunc);
-  }
-  let addValue = (app, name, valueFunc) => {
-    return app.value(name, valueFunc);
-  }
-
-  let addMiddleWare = (app, name, middlewareFunc) => {
-    return app.middleware(name, middlewareFunc);
-  }
-
 
   let core = {
     app: _app
   };
   core.run = run.bind(core);
-  core.provider = addProvider.bind(null, skeletonpwa);
-  core.service = addService.bind(null, skeletonpwa);
-  core.factory = addFactory.bind(null, skeletonpwa);
-  core.middleware = addMiddleWare.bind(null, skeletonpwa);
-  core.value = addValue.bind(null, skeletonpwa);
-  core.constant = addConstant.bind(null, skeletonpwa);
-  return core;
+  let coreapi = Object.assign({}, core, coreapi);
+  return coreapi;
 }
 
 skeletonEngine.bootstrap = function(name, config) {
@@ -130,7 +137,7 @@ skeletonEngine.bootstrap = function(name, config) {
         datastore.$type = 'service';
         datastore.$value = Map;
         container.$register(datastore);
-        return new CoreApp(skeletonPwa, skeletonConfig, $document, state, domApi, apiFactory, container.datastore);
+        return new CoreApp(skeletonPwa, skeletonConfig, $document, state, domApi, apiFactory, container.datastore, container.coreApi);
       }
     });
     return this;
@@ -143,10 +150,8 @@ skeletonEngine.shell = function(name) {
   if (inst) {
     return inst;
   }
-  let addProvider = (app, name, providerFunc) => {
-    return app.provider(name, providerFunc);
-  }
-  return addProvider.bind(null, skeletonPwa);
+  let api = skeletonPwa.container.coreApi;
+  return api;
   // throw new Error(`${name} not init`);
 }
 
