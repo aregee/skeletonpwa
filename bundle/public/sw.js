@@ -1,4 +1,4 @@
-const CACHE_NAME = '{{cache}}';
+const CACHE_NAME = 'uggedvus';
 
 const CRITICAL = [
   '/',
