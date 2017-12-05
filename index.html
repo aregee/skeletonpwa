@@ -3,10 +3,10 @@
 
 <head>
   <meta charset="UTF-8">
-  <base href="/"/>
-  <link rel="shortcut icon" href="/bundle/public/styles/images/favicon.png" type="image/x-icon">
-  <link rel="icon" href="/bundle/public/styles/images/favicon.png" type="image/x-icon">
-  <link rel="manifest" href="/bundle/public/manifest.json">
+  <base href="/skeletonpwa"/>
+  <link rel="shortcut icon" href="bundle/public/styles/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="bundle/public/styles/images/favicon.png" type="image/x-icon">
+  <link rel="manifest" href="bundle/public/manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <meta name="theme-color" content="#ffb400">
@@ -14,8 +14,8 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/bundle/public/sw.js', {
-            scope: '/bundle/public/'
+        navigator.serviceWorker.register('bundle/public/sw.js', {
+            scope: 'bundle/public/'
           })
           .then(function() {
             console.log('Service Worker Registered');
@@ -33,7 +33,7 @@
   <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,500i,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="/bundle/public/styles/css/normalize.css" media="screen" title="no title" charset="utf-8">
+  <link rel="stylesheet" href="bundle/public/styles/css/normalize.css" media="screen" title="no title" charset="utf-8">
   <style>
     .view-container {
       width: inherit;
@@ -433,5 +433,5 @@
   </div>
 </body>
 
-<script src="/bundle/public/skeleton.js" ></script>
+<script src="bundle/public/skeleton.js" ></script>
 </html>
