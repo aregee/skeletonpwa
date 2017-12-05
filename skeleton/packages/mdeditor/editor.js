@@ -54,7 +54,7 @@ skeletondemo.factory('MithrilEditor', function (container) {
 
     createTemplate() {
       let str = this.panels.join('');
-      let scripts = ['/bundle/public/editor.js'];
+      let scripts = ['/skeletonpwa/bundle/public/editor.js'];
       let inculdes = scripts.map(m => this.dom.script({
         async: true,
         src: m
