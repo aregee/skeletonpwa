@@ -1,12 +1,12 @@
 const CACHE_NAME = '{{cache}}';
 
 const CRITICAL = [
-  '/',
-  '/bundle/public/skeleton.js',
+  '/skeletonpwa/',
+  '/skeletonpwa/bundle/public/skeleton.js',
 ];
 
 const NON_CRITICAL = [
-  '/favicon.ico'
+  '/skeletonpwa/bundle/public/styles/images/favicon.png'
 ];
 
 const addToCache = (request, response) => {
