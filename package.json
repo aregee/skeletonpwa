@@ -4,7 +4,9 @@
   "description": "Lightweight vanilla javascript Progressive Webapp framework",
   "main": "bundle/index.js",
   "scripts": {
-    "serve": "webpack-dev-server --progress --inline --port 8080 --config webpack.config.js",
+    "prod": "export NODE_SHELL_ENV=production && ./node_modules/webpack/bin/webpack.js --config webpack.config.js --progress ",
+    "serve": "export NODE_SHELL_ENV=production && webpack-dev-server --progress --inline --port 8080 --config webpack.skeleton.config.js",
+    "build-sw": "node sw-build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -32,6 +34,8 @@
     "webpack-dev-server": "^1.16.5"
   },
   "dependencies": {
+    "marked": "^0.3.7",
+    "mithril": "^1.1.6",
     "svg-url-loader": "^2.2.0"
   }
 }

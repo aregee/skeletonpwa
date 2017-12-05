@@ -1,11 +1,437 @@
-<html>
-  <head>
-    <meta charset="utf-8">
-  </head>
-  <body>
-    <script src="/bundle/index.js"></script>
-    <script type="text/javascript">
-      console.log(skeletonPwa);
-    </script>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <base href="/"/>
+  <link rel="shortcut icon" href="/bundle/public/styles/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="/bundle/public/styles/images/favicon.png" type="image/x-icon">
+  <link rel="manifest" href="/bundle/public/manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta name="theme-color" content="#ffb400">
+  <title>Skeleton Engine</title>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/bundle/public/sw.js', {
+            scope: '/bundle/public/'
+          })
+          .then(function() {
+            console.log('Service Worker Registered');
+          })
+          .catch(function(err) {
+            throw new Error(err)
+          })
+
+        navigator.serviceWorker.ready.then(function() {
+          console.log('Service Worker Ready');
+        });
+      });
+    }
+  </script>
+  <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,500i,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="/bundle/public/styles/css/normalize.css" media="screen" title="no title" charset="utf-8">
+  <style>
+    .view-container {
+      width: inherit;
+    }
+    /* Grid
+  –––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+    .container-shell {
+      position: relative;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    .flex,
+    .flexes {
+      width: 100%;
+      float: left;
+      box-sizing: border-box;
+    }
+    /* For devices larger than 400px */
+
+    @media (min-width: 400px) {
+      .container-shell {
+        width: 85%;
+        padding: 0;
+      }
+    }
+    /* For devices larger than 550px */
+
+    @media (min-width: 550px) {
+      .container-shell {
+        width: 80%;
+      }
+      .flex,
+      .flexes {
+        margin-left: 4%;
+      }
+      .flex:first-child,
+      .flexes:first-child {
+        margin-left: 0;
+      }
+
+      .one.flex,
+      .one.flexes {
+        width: 4.66666666667%;
+      }
+      .two.flexes {
+        width: 13.3333333333%;
+      }
+      .three.flexes {
+        width: 22%;
+      }
+      .four.flexes {
+        width: 30.6666666667%;
+      }
+      .five.flexes {
+        width: 39.3333333333%;
+      }
+      .six.flexes {
+        width: 48%;
+      }
+      .seven.flexes {
+        width: 56.6666666667%;
+      }
+      .eight.flexes {
+        width: 65.3333333333%;
+      }
+      .nine.flexes {
+        width: 74.0%;
+      }
+      .ten.flexes {
+        width: 82.6666666667%;
+      }
+      .eleven.flexes {
+        width: 91.3333333333%;
+      }
+      .twelve.flexes {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .one-third.flex {
+        width: 30.6666666667%;
+      }
+      .two-thirds.flex {
+        width: 65.3333333333%;
+      }
+
+      .one-half.flex {
+        width: 48%;
+      }
+
+      /* Offsets */
+      .offset-by-one.flex,
+      .offset-by-one.flexes {
+        margin-left: 8.66666666667%;
+      }
+      .offset-by-two.flex,
+      .offset-by-two.flexes {
+        margin-left: 17.3333333333%;
+      }
+      .offset-by-three.flex,
+      .offset-by-three.flexes {
+        margin-left: 26%;
+      }
+      .offset-by-four.flex,
+      .offset-by-four.flexes {
+        margin-left: 34.6666666667%;
+      }
+      .offset-by-five.flex,
+      .offset-by-five.flexes {
+        margin-left: 43.3333333333%;
+      }
+      .offset-by-six.flex,
+      .offset-by-six.flexes {
+        margin-left: 52%;
+      }
+      .offset-by-seven.flex,
+      .offset-by-seven.flexes {
+        margin-left: 60.6666666667%;
+      }
+      .offset-by-eight.flex,
+      .offset-by-eight.flexes {
+        margin-left: 69.3333333333%;
+      }
+      .offset-by-nine.flex,
+      .offset-by-nine.flexes {
+        margin-left: 78.0%;
+      }
+      .offset-by-ten.flex,
+      .offset-by-ten.flexes {
+        margin-left: 86.6666666667%;
+      }
+      .offset-by-eleven.flex,
+      .offset-by-eleven.flexes {
+        margin-left: 95.3333333333%;
+      }
+
+      .offset-by-one-third.flex,
+      .offset-by-one-third.flexes {
+        margin-left: 34.6666666667%;
+      }
+      .offset-by-two-thirds.flex,
+      .offset-by-two-thirds.flexes {
+        margin-left: 69.3333333333%;
+      }
+
+      .offset-by-one-half.flex,
+      .offset-by-one-half.flexes {
+        margin-left: 52%;
+      }
+    }
+    /* Links
+  –––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+    a {
+      color: #1EAEDB;
+    }
+
+    a:hover {
+      color: #0FA0CE;
+    }
+    /* Utilities
+  –––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+    .u-full-width {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .u-max-full-width {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .u-pull-right {
+      float: right;
+    }
+
+    .u-pull-left {
+      float: left;
+    }
+    /* Clearing
+  –––––––––––––––––––––––––––––––––––––––––––––––––– */
+    /* Self Clearing Goodness */
+
+    .container-shell:after,
+    .row-shell:after,
+    .u-cf {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    /* Media Queries
+  –––––––––––––––––––––––––––––––––––––––––––––––––– */
+    /*
+  Note: The best way to structure the use of media queries is to create the queries
+  near the relevant code. For example, if you wanted to change the styles for buttons
+  on small devices, paste the mobile query code up in the buttons section and style it
+  there.
+  */
+    /* Larger than mobile */
+
+    @media (min-width: 400px) {}
+    /* Larger than phablet (also point when grid becomes active) */
+
+    @media (min-width: 550px) {}
+    /* Larger than tablet */
+
+    @media (min-width: 750px) {}
+    /* Larger than desktop */
+
+    @media (min-width: 1000px) {}
+    /* Larger than Desktop HD */
+
+    @media (min-width: 1200px) {}
+
+    [ng-cloak].splash {
+      display: block !important;
+    }
+
+    [ng-cloak] {
+      display: none;
+    }
+
+    .splash {
+      background-size: 290px;
+      color: white;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 47px;
+      bottom: 0;
+      z-index: 9999;
+      display: none;
+    }
+
+
+    .content-loading {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+      width: 100%;
+      height: 25vh;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      font-size: 1em;
+    }
+
+
+    .loading {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .offline-content {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      flex-direction: column;
+      -webkit-box-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+      width: 80%;
+      height: 100vh;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      font-size: 1em;
+      margin: auto;
+    }
+
+    .offline-content .logo-icon {
+      width: 25vw;
+      height: 25vh;
+      background-size: 100% 100%;
+      opacity: 0.3;
+    }
+
+    #skeleton-nav {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      background: white;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      z-index: 1;
+      border-bottom: 1px solid lightgrey;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+    }
+
+    #skeleton-nav>.shell {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+
+    .shell {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+      width: 100%;
+      overflow: auto;
+    }
+
+    .logo-nav {
+      padding-top: 5px;
+      padding-left: 17px;
+    }
+
+    .nav-tab {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      padding-left: 20px;
+      padding-right: 20px;
+      margin: 0;
+      list-style: none;
+      border-bottom: 1px solid #ddd;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      overflow: auto;
+    }
+
+    .nav-tab a,
+    .nav-tab a:link {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      color: dimgray;
+      text-decoration: none;
+      padding: .8em;
+      margin: 0;
+      transition: background-color .2s ease-out;
+    }
+
+    .nav-tab a.active {
+      background-color: #ffb400;
+      color: black;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <header id="skeleton-nav">
+      <div class="container-shell">
+        <div class="row-shell">
+          <div class="two flexes">
+            <a href="/" class="logo" title="Skeleton PWA">
+                  <img class="logo-nav" src="/bundle/public/styles/images/favicon.png" alt="Skleton PWA">
+                </a>
+          </div>
+          <div class="six flexes">
+            <div class="nav-tab">
+              <a class="view" href="/editor" title="MD editor">Mark Down Editor</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="shell">
+      <div class="view-container"></div>
+    </div>
+  </div>
+</body>
+
+<script src="/bundle/public/skeleton.js" ></script>
 </html>
