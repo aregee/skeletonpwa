@@ -20,11 +20,14 @@ const output = {
 };
 
 const modules = {
-  loaders: [
-    { test: /\.html$/, loader: 'html-loader' },
+  loaders: [{
+      test: /\.html$/,
+      loader: 'html-loader'
+    },
     {
       test: /\.js$/,
       loader: 'babel-loader',
+      exclude: [path.resolve(__dirname, 'node_modules')],
       query: {
         plugins: ['babel-plugin-transform-object-rest-spread'],
         presets: ['env']
@@ -38,11 +41,11 @@ const plugins = [
 ];
 
 const devServer = {
-    historyApiFallback: {
-        index: './index.html',
-    },
-    stats: 'minimal',
-    disableHostCheck: true
+  historyApiFallback: {
+    index: './index.html',
+  },
+  stats: 'minimal',
+  disableHostCheck: true
 };
 
 
