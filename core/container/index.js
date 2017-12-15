@@ -7,6 +7,7 @@ import {
   supportApi,
   supportRouterFactory,
   supportComponents,
+  singleSpaMithril,
   Vent,
   mix
 } from './modules';
@@ -61,9 +62,14 @@ const supportSingleSpas = (Engine) => {
     container.service('singleSpaAngular', function () {
       return singleSpaAngular;
     });
+    container.service('singleSpaMithril', function () {
+      console.log(singleSpaMithril);
+      return singleSpaMithril;
+    });
   }
   Engine.onInstance(onInstance);
 };
+
 supportDomApi(ProgressiveEngine);
 supportRouterFactory(ProgressiveEngine);
 supportApi(ProgressiveEngine);

@@ -1,15 +1,9 @@
 import {
-  skeletonEngine,
-  skeletonPwa
-} from '../../../bundle';
-
-import {
   panel
 } from '../../assets/404';
 
-const skeletondemo = skeletonEngine.shell('skeletondemo');
 
-skeletondemo.factory('Four0FourView', function(container) {
+export const fourOfour = function (container) {
   const mix = container.mix;
   const GenericView = container.GenericView;
   const View = container.View;
@@ -31,7 +25,7 @@ skeletondemo.factory('Four0FourView', function(container) {
       super.loadData();
       this.template.classList.add('loading');
       let store = (parms) => {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
           resolve(panel);
         });
       }
@@ -63,4 +57,28 @@ skeletondemo.factory('Four0FourView', function(container) {
   // skeletondemo.app.container.register('Four0FourView', Four0FourView);
   return Four0FourView;
 
-});
+};
+
+export const notFound = function () {
+
+  this.$get = function (container) {
+    const $document = container.$document;
+    const domApi = container.$createElement;
+    const $window = container.$window;
+    const Four0FourView = container.Four0FourView;
+    let app = container.skeletondemo.app;
+    const skeletondemoEngine = app.utils.api;
+    let genUrl = app.utils.genUrl;
+    let url = ['404', (parms = []) => skeletondemoEngine.get(`${genUrl('/app/404?', parms)}`)];
+    container.datastore.set(url[0], url[1]);
+    const four0four = (viewClassName, urlName, app) => {
+      return (...props) => {
+        let ngView = new Four0FourView(viewClassName, urlName, props, app.element, app);
+        return ngView;
+      }
+    };
+    return (viewClassName, urlName) => {
+      return four0four(viewClassName, urlName, app);
+    };
+  }
+};
