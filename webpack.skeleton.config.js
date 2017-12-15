@@ -9,7 +9,16 @@ const devtool = isProd ?
 
 const entry = {
   skeleton: './skeleton/index.js',
-  editor: './modules/editor.js'
+  editor: './modules/editor.js',
+  'common-dependencies': [
+      'mithril',
+      // 'skeletonpwa',
+      /* Just one version of react, too. react-router is fine to have multiple versions of,
+       * though, so no need to put it in common dependencies
+       */
+      'react',
+      'react-dom',
+    ],
 };
 
 const output = {
@@ -36,7 +45,7 @@ const modules = {
       loader: 'babel-loader',
       query: {
         plugins: ['babel-plugin-transform-object-rest-spread'],
-        presets: ['env']
+        presets: ['env', 'react']
       }
     }
   ]
@@ -75,6 +84,9 @@ if (isProd) {
       'process.env': {
         NODE_SHELL_ENV: JSON.stringify('production')
       }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common-dependencies',
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true,

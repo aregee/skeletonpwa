@@ -11,5 +11,7 @@ var req = require.context('./packages', true, /\.js$/);
 req.keys().map(req);
 
 skeletondemoApp.shell('skeletondemo').run((app) => {
-  console.log(app);
+    console.log(app);
+    let singleSpa = app.core.container.singleSpa;
+    singleSpa.start();
 });

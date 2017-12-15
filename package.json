@@ -27,6 +27,7 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
     "babel-preset-es2015-native-modules": "^6.9.4",
     "bundle-loader": "^0.5.5",
     "copy-webpack-plugin": "^4.0.1",
@@ -37,6 +38,9 @@
     "marked": "^0.3.7",
     "mithril": "^1.1.6",
     "svg-url-loader": "^2.2.0",
+    "rxjs": "^5.4.2",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
     "single-spa": "^3.5.0",
     "single-spa-angular2": "^1.1.0",
     "single-spa-react": "^2.0.4"

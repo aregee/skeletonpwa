@@ -41,13 +41,15 @@ skeletonPwa.factory('coreApi', function (container) {
 });
 
 
-const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, state, domApi, apiFactory, datastore, coreApi) {
+const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, state, domApi, apiFactory, datastore, coreApi, singleSpa, singleSpaReact) {
 
   const _app = {};
   const viewContainer = skeletonconfig.viewContainer ? skeletonconfig.viewContainer : '.view-container';
 
   _app.utils = {};
   _app.core = skeletonpwa;
+  _app.singleSpa = singleSpa;
+  _app.singleSpaReact = singleSpaReact;
   _app.components = {};
   _app.element = domApi(skeletonconfig.elements);
   _app.utils.api = apiFactory(skeletonconfig.api);
@@ -138,7 +140,7 @@ skeletonEngine.bootstrap = function(name, config) {
         datastore.$type = 'service';
         datastore.$value = Map;
         container.$register(datastore);
-        return new CoreApp(skeletonPwa, skeletonConfig, $document, state, domApi, apiFactory, container.datastore, container.coreApi);
+        return new CoreApp(skeletonPwa, skeletonConfig, $document, state, domApi, apiFactory, container.datastore, container.coreApi, container.singleSpa, container.singleSpaReact);
       }
     });
     return this;
