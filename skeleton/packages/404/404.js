@@ -9,7 +9,7 @@ import {
 
 const skeletondemo = skeletonEngine.shell('skeletondemo');
 
-skeletondemo.factory('Four0FourView', function (container) {
+skeletondemo.factory('Four0FourView', function(container) {
   const mix = container.mix;
   const GenericView = container.GenericView;
   const View = container.View;
@@ -31,7 +31,7 @@ skeletondemo.factory('Four0FourView', function (container) {
       super.loadData();
       this.template.classList.add('loading');
       let store = (parms) => {
-        return new Promise(function (resolve, reject) {
+        return new Promise(function(resolve, reject) {
           resolve(panel);
         });
       }
@@ -54,7 +54,9 @@ skeletondemo.factory('Four0FourView', function (container) {
       return this.dom.div({
         id: "skeletondemo-404",
         className: "container-shell me404"
-      }, [str].concat(inculdes));
+      }, [str, this.dom.div({
+        id: 'app1'
+      })].concat(inculdes));
     }
   }
 
