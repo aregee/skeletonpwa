@@ -1,12 +1,13 @@
-const CACHE_NAME = 'cgarpcg';
+const CACHE_NAME = '{{cache}}';
 
 const CRITICAL = [
-  '/skeletonpwa/',
-  '/skeletonpwa/bundle/public/skeleton.js',
+  '/',
+  '/bundle/public/common-dependencies.js',
+  '/bundle/public/skeleton.js',
 ];
 
 const NON_CRITICAL = [
-  '/skeletonpwa/bundle/public/styles/images/favicon.png'
+  '/bundle/public/styles/images/favicon.png'
 ];
 
 const addToCache = (request, response) => {
