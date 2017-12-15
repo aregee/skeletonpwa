@@ -1,49 +1,43 @@
-import {
-  skeletonEngine,
-  skeletonPwa
-} from '../../../bundle';
-import m from 'mithril';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import {
-  Editor
-} from '../modules/editor.js';
 
-const skeletondemo = skeletonEngine.shell('skeletondemo');
+import Root from './root.component.js';
 
-skeletondemo.provider('mithrilapp', function () {
+export const reactAppProvider = function () {
 
   this.$get = function (container) {
-    const singleSpaMithril = container.singleSpaMithril;
+    const singleSpaReact = container.singleSpaReact;
 
     function domElementGetter() {
       // Make sure there is a div for us to render into
-      let el = document.getElementById('editor');
+      let el = document.getElementById('app1');
       if (!el) {
         el = document.createElement('div');
-        el.id = 'editor';
+        el.id = 'app1';
         document.body.appendChild(el);
       }
 
       return el;
     }
 
-    const mithrilLifeCyles = singleSpaMithril({
-      Mithril: m,
-      rootComponent: () =>
-        import ('../modules/editor.js'),
-      domElementGetter: domElementGetter
+    const reactLifecycles = singleSpaReact({
+      React,
+      ReactDOM,
+      rootComponent: Root,
+      domElementGetter,
     });
 
     function bootstrap(props) {
-      return mithrilLifeCyles.bootstrap(props);
+      return reactLifecycles.bootstrap(props);
     }
 
     function mount(props) {
-      return mithrilLifeCyles.mount(props);
+      return reactLifecycles.mount(props);
     }
 
     function unmount(props) {
-      return mithrilLifeCyles.unmount(props);
+      return reactLifecycles.unmount(props);
     }
 
     return {
@@ -53,21 +47,22 @@ skeletondemo.provider('mithrilapp', function () {
     };
   };
 
-});
-skeletondemo.factory('MithrilEditor', function (container) {
+};
+
+export const ReactAppView = function (container) {
   const mix = container.mix;
   const GenericView = container.GenericView;
   const View = container.View;
   const singleSpa = container.singleSpa;
-  const mithrilapp = container.mithrilapp;
+  const app1 = container.app1;
+  console.log(app1);
 
   function hashPrefix(prefix) {
     return function (location) {
       return location.hash.startsWith(`#${prefix}`);
     }
   }
-
-  class MithrilEditor extends mix(View).with(GenericView) {
+  class ReactView extends mix(View).with(GenericView) {
     constructor(
       viewClassName,
       urlName,
@@ -82,11 +77,10 @@ skeletondemo.factory('MithrilEditor', function (container) {
       // super.loadData();
       this.template.classList.add('loading');
 
-      // Set the page number in address bar
-      // history.pushState(null, null, this.skeletondemo.utils.genUrl('/editor'));
+      singleSpa.declareChildApplication('app-1', () => Promise.resolve(app1), hashPrefix('/app1'));
       let store = (...parms) => {
         let mithPanel = this.dom.div({
-          id: 'example'
+          id: 'app1'
         });
 
         return new Promise(function (resolve, reject) {
@@ -100,7 +94,6 @@ skeletondemo.factory('MithrilEditor', function (container) {
       store(['top', 'panel', 'bottom']).then(res => {
           console.log(res.panel);
           this.panels = this.panels.concat([res.panel]);
-          singleSpa.declareChildApplication('app-2', () => Promise.resolve(mithrilapp), hashPrefix('/editor'));
           this.render();
         })
         .catch(e => {
@@ -112,19 +105,12 @@ skeletondemo.factory('MithrilEditor', function (container) {
 
     createTemplate() {
       let str = this.panels.join('');
-      let scripts = [];
-      let inculdes = scripts.map(m => this.dom.script({
-        async: true,
-        src: m
-      }));
-      let editor = this.dom.div({
-        id: "editor"
-      }, []);
+      console.log(str);
       let pannel = this.dom.div({
-        id: "skeletondemo-mithril",
+        id: "app1",
         style: "height:82vh"
-      }, [].concat(inculdes));
-      pannel.appendChild(editor);
+      });
+      // pannel.appendChild(editor);
       pannel.appendChild(this.dom.style({}, [`<style>
   html,body {height:100%;margin:0;}
   h1,h2,h3,h4,h5,h6,p {margin:0 0 10px;}
@@ -146,13 +132,14 @@ skeletondemo.factory('MithrilEditor', function (container) {
     }
   }
 
-  return MithrilEditor;
+  return ReactView;
 
-});
+};
 
-skeletondemo.provider('mdeditor', function () {
+
+export const reactview = function () {
   this.$get = function (container) {
-    const MithrilEditor = container.MithrilEditor;
+    const ReactView = container.ReactView;
     const app = container.skeletondemo.app;
     const router = container.state;
     const datastore = container.datastore;
@@ -160,24 +147,13 @@ skeletondemo.provider('mdeditor', function () {
     let genUrl = app.utils.genUrl;
     let url = ['core', (parms = []) => skeletondemoEngine.get(genUrl('/app/mith?', parms))];
     datastore.set(url[0], url[1]);
-    const editorView = (viewClassName, urlName, app) => {
+    const reactview = (viewClassName, urlName, app) => {
       return (...props) => {
-        let ngView = new MithrilEditor(viewClassName, urlName, props, app.element, app);
+        let ngView = new ReactView(viewClassName, urlName, props, app.element, app);
         return ngView;
       }
     };
 
-    return editorView;
+    return reactview;
   }
-});
-
-skeletondemo.app.vent.on('engineLoaded', function (name, app) {
-  let editorView = skeletondemo.app.core.container.mdeditor;
-  let router = skeletondemo.app.appRouter;
-
-  router.addRoute({
-    component: editorView('editor-view', 'core', skeletondemo.app),
-    pattern: ['/editor/.+', '/editor']
-  });
-
-});
+};

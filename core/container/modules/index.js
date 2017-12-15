@@ -16,13 +16,18 @@ import {
   supportComponents
 } from './views';
 
-import { mix } from './mixin';
+import {
+  mix
+} from './mixin';
+
+import singleSpaMithril from './singleMithril';
 
 export {
   supportApi,
   supportDomApi,
   supportRouterFactory,
   supportComponents,
+  singleSpaMithril,
   Vent,
   mix
 }

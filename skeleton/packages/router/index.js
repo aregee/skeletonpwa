@@ -22,6 +22,7 @@ skeletondemo.provider('router', function () {
 
     const $window = shell.$window;
     const $document = shell.$document;
+    const singleSpa = shell.singleSpa;
 
     function _cleanContainer() {
       if (currentView && currentView.parentElement) {
@@ -41,7 +42,7 @@ skeletondemo.provider('router', function () {
 
       container.appendChild(currentView);
       hooks.afterMount();
-      skeletonPwa.vent.emit('loadngapp', skeletondemo.app);
+      // skeletonPwa.vent.emit('loadngapp', skeletondemo.app);
     }
 
 
