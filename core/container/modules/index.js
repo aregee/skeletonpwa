@@ -22,12 +22,15 @@ import {
 
 import singleSpaMithril from './singleMithril';
 
+import singleSpaAngular1 from './singleAngular';
+
 export {
   supportApi,
   supportDomApi,
   supportRouterFactory,
   supportComponents,
   singleSpaMithril,
+  singleSpaAngular1,
   Vent,
   mix
 }
