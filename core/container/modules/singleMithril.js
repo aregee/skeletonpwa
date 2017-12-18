@@ -2,6 +2,7 @@ const defaultOpts = {
   // required opts
   Mithril: null,
   rootComponent: null,
+  prefix: '?',
   domElementGetter: null,
 }
 
@@ -19,8 +20,8 @@ export default function singleSpaMithril(userOpts) {
     throw new Error(`single-spa-mithril must be passed opts.Mithril`);
   }
 
-  if (!opts.rootComponent) {
-    throw new Error(`single-spa-mithril must be passed opts.rootComponent`);
+  if (!opts.rootComponent && !opts.routes) {
+    throw new Error(`single-spa-mithril must be passed opts.rootComponent or opts.routes`);
   }
 
   if (!opts.domElementGetter) {
@@ -41,15 +42,16 @@ function bootstrap(opts) {
 function mount(opts) {
   return new Promise((resolve, reject) => {
     const whenFinished = resolve;
-    opts.rootComponent()
-      .then((com) => {
-        console.log(com);
-        opts.Mithril.mount(getRootDomEl(opts), com.default);
-        whenFinished();
-      })
-      .catch(err => {
-        reject(err);
-      })
+    let routes = opts.routes ? opts.routes: false;
+    if (typeof routes !== 'object') {
+      opts.Mithril.mount(getRootDomEl(opts), opts.rootComponent);
+    } else {
+      opts.Mithril.route.prefix(opts.prefix);
+      opts.Mithril.route(getRootDomEl(opts), opts.base, opts.routes);
+      opts.stateInit()
+    }
+
+    whenFinished();
   })
 }
 
