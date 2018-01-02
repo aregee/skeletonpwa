@@ -53,12 +53,8 @@ function mount(opts, mountedInstances) {
 		.resolve()
 		.then(() => {
 			window.angular = opts.angular;
-
 			const containerEl = getContainerEl(opts);
-			const bootstrapEl = document.createElement('div');
-			bootstrapEl.id = opts.elementId;
-
-			containerEl.appendChild(bootstrapEl);
+			const bootstrapEl = containerEl;
 
 			if (opts.uiRouter) {
 				const uiViewEl = document.createElement('div');
@@ -71,9 +67,9 @@ function mount(opts, mountedInstances) {
 			}
 
 			if (opts.strictDi) {
-				mountedInstances.instance = opts.angular.bootstrap(bootstrapEl, [opts.mainAngularModule], {strictDi: opts.strictDi})
+				mountedInstances.instance = opts.angular.bootstrap(bootstrapEl, [opts.mainAngularModule], {strictDi: opts.strictDi});
 			} else {
-				mountedInstances.instance = opts.angular.bootstrap(bootstrapEl, [opts.mainAngularModule])
+				mountedInstances.instance = opts.angular.bootstrap(bootstrapEl, [opts.mainAngularModule]);
 			}
 	});
 }
