@@ -8,14 +8,43 @@ const devtool = isProd ?
   'cheap-module-eval-source-map';
 
 const entry = {
-  skeleton: './skeleton/index.js',
-  editor: './modules/editor.js'
+  skeleton: __dirname + '/skeleton/index.js',
+  // editor: './modules/editor.js',
+  'common-dependencies': [
+    'mithril',
+    // 'skeletonpwa',
+    /* Just one version of react, too. react-router is fine to have multiple versions of,
+     * though, so no need to put it in common dependencies
+     */
+    'react',
+    'react-dom'
+  ],
 };
 
 const output = {
   path: path.resolve('./bundle/public'),
   filename: `[name].js`,
-  publicPath: '/'
+  chunkFilename: '[name].bundle.js',
+  publicPath: '/bundle/'
+};
+
+function getBabelConfig() {
+  return {
+    presets: [
+      'env',
+      'react', ['babel-preset-env', {
+        targets: {
+          "browsers": ["last 2 versions"],
+        },
+      }],
+    ],
+    plugins: [
+      'transform-object-rest-spread',
+      'transform-class-properties',
+      'syntax-dynamic-import',
+      'transform-function-bind',
+    ],
+  };
 };
 
 const modules = {
@@ -34,10 +63,7 @@ const modules = {
     {
       test: /\.js$/,
       loader: 'babel-loader',
-      query: {
-        plugins: ['babel-plugin-transform-object-rest-spread'],
-        presets: ['env']
-      }
+      query: getBabelConfig()
     }
   ]
 };
@@ -75,6 +101,9 @@ if (isProd) {
       'process.env': {
         NODE_SHELL_ENV: JSON.stringify('production')
       }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common-dependencies'
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true,

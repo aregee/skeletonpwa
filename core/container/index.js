@@ -7,13 +7,15 @@ import {
   supportApi,
   supportRouterFactory,
   supportComponents,
+  singleSpaMithril,
+  singleSpaAngular1,
   Vent,
   mix
 } from './modules';
 
 import * as singleSpa from 'single-spa';
 import singleSpaReact from 'single-spa-react';
-import singleSpaAngular from 'single-spa-angular2';
+
 
 ProgressiveEngine.instanceWaiters = [];
 
@@ -59,11 +61,15 @@ const supportSingleSpas = (Engine) => {
       return singleSpaReact;
     });
     container.service('singleSpaAngular', function () {
-      return singleSpaAngular;
+      return singleSpaAngular1;
+    });
+    container.service('singleSpaMithril', function () {
+      return singleSpaMithril;
     });
   }
   Engine.onInstance(onInstance);
 };
+
 supportDomApi(ProgressiveEngine);
 supportRouterFactory(ProgressiveEngine);
 supportApi(ProgressiveEngine);
