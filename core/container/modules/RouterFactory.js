@@ -1,54 +1,26 @@
-
+import UniversalRouter from 'universal-router';
+import generateUrls from 'universal-router/generateUrls';
 
 
 export const supportRouterFactory = (ProgressiveEngine) => {
   class RouterService {
-    constructor(routes=[]) {
+    constructor(routes=[], opts) {
       this.routes = routes;
+      this.universalrouter = new UniversalRouter(routes, opts);
+      this.url = (router) => (props) => generateUrls(router, props);
+      this.genurl = this.url(this.universalrouter);
     }
 
     route(url) {
-      let propHandle = (url, routes) => (resolve, reject) => {
-
-        // first check all translators
-        for (let i = 0; i < routes.length; i++) {
-          let route = routes[i];
-          if (route.test(url)) {
-            resolve(route.component);
-            return;
-          }
-        }
-
-
-        reject({
-          message: 'component not found',
-          status: 404
-        });
-      };
-
-      return new Promise(propHandle(url, this.routes));
+      return this.universalrouter.resolve(url);
     }
 
-
-    patternToRegExp(pattern) {
-      if (!Array.isArray(pattern)) {
-        return this.patternToRegExp([pattern]);
-      }
-      return new RegExp([
-        '^',
-        pattern.map(function (p) {
-          return p.replace('*', '[^/]+') + '$';
-        }).join('|'),
-        '$'
-      ].join(''), 'i');
+    genUrl(state, props, routerprops) {
+      return this.genurl(routerprops)(state, props);
     }
 
     addRoute(route) {
-      route.regex = this.patternToRegExp(route.pattern);
-      route.test = (url) => {
-        return route.regex.test(url.split('?')[0]);
-      };
-      this.routes.push(route);
+      this.universalrouter.root.children.push(route);
       return this;
     }
 
