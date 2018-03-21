@@ -4,11 +4,20 @@ import generateUrls from 'universal-router/generateUrls';
 
 export const supportRouterFactory = (ProgressiveEngine) => {
   class RouterService {
-    constructor(routes=[], opts) {
-      this.routes = routes;
-      this.universalrouter = new UniversalRouter(routes, opts);
+    constructor() {
+      this.routes = [];
+      this.opts = {};
+      this.universalrouter = null;
       this.url = (router) => (props) => generateUrls(router, props);
+      this.genurl = null;
+    }
+
+    initRouter(routes=[], opts={}) {
+      this.routes = routes;
+      this.opts = opts;
+      this.universalrouter = new UniversalRouter(this.routes, this.opts);
       this.genurl = this.url(this.universalrouter);
+      return this;
     }
 
     route(url) {

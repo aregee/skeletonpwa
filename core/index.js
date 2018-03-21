@@ -51,12 +51,13 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
   _app.singleSpa = singleSpa;
   _app.singleSpaReact = singleSpaReact;
   _app.components = {};
+  _app.config = () => _app.core.container.appCfg;
   _app.element = domApi(skeletonconfig.elements);
   _app.utils.api = apiFactory(skeletonconfig.api);
   _app.utils.viewContainer = $document.querySelector(viewContainer);
   _app.components.views = new Map();
   _app.vent = skeletonpwa.vent;
-  _app.appRouter = state;
+  _app.appRouter = state;//.initRouter(skeletonconfig.routes, skeletonconfig.routeConfig);
   _app.datastore = datastore;
   _app.utils.hooks = {};
   let forPage = (ack) => {
@@ -123,10 +124,29 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
   let coreapi = Object.assign({}, core, coreApi);
   return coreapi;
 }
+skeletonPwa.factory('uirouter', function(container) {
+    return (state, config) => state.initRouter(config.routes, config.routeConfig);
+});
 
+skeletonPwa.factory('loadcfg', function(container) {
+    return (cfg, http) => {
+        let api = http(cfg.api);
+        api.get('/api/get-public-config')
+        .then((config) => {
+        const appCfg = {};
+        appCfg.$name = 'appCfg';
+        appCfg.$type = 'constant';
+        appCfg.$value = Object.assign({}, cfg, config);
+        container.$register(appCfg);
+        }).catch((err) => {
+          throw new Error(err);
+        });
+    };
+});
 skeletonEngine.bootstrap = function(name, config) {
   if (config) {
     let skeletonConfig = config;
+    
     skeletonPwa.provider(name, function() {
 
       this.$get = function(container) {
@@ -135,6 +155,8 @@ skeletonEngine.bootstrap = function(name, config) {
         const domApi = container.$createElement;
         const $window = container.$window;
         const state = container.state;
+        container.uirouter(state, skeletonConfig);
+        container.loadcfg(skeletonConfig, apiFactory);
         const datastore = {};
         datastore.$name = 'datastore';
         datastore.$type = 'service';

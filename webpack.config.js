@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const isProd = process.env.NODE_SHELL_ENV === 'production';
 
-const devtool = isProd ?
+const devtool = false ?
   'source-map' :
   'cheap-module-eval-source-map';
 
