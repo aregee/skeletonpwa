@@ -131,22 +131,21 @@ skeletonPwa.factory('uirouter', function(container) {
 skeletonPwa.factory('loadcfg', function(container) {
     return (cfg, http) => {
         let api = http(cfg.api);
-        let cfgprop = api.get('/api/get-public-config');
-        cfgprop.then((config) => {
+        let cfgprop = api.get(cfg.publicConfig);
         const appCfg = {};
         appCfg.$name = 'appCfg';
         appCfg.$type = 'constant';
-        appCfg.$value = Object.assign({reloadcfg: () => cfgprop.then(d => d)}, cfg, config);
-        container.$register(appCfg);
+        cfgprop.then((config) => {
+          appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, cfg, config);
+          container.$register(appCfg);
         }).catch((err) => {
-            const appCfg = {};
-            appCfg.$name = 'appCfg';
-            appCfg.$type = 'constant';
-            appCfg.$value = Object.assign({reloadcfg: () => cfgprop.then(d => d)}, cfg);
+          appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, cfg);
           container.$register(appCfg);
         });
     };
 });
+
+
 skeletonEngine.bootstrap = function(name, config) {
   if (config) {
     let skeletonConfig = config;
