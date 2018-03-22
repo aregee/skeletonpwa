@@ -132,7 +132,6 @@ skeletonPwa.factory('loadcfg', function(container) {
     return (cfg, http) => {
         let api = http(cfg.api);
         let cfgprop = api.get('/api/get-public-config');
-
         cfgprop.then((config) => {
         const appCfg = {};
         appCfg.$name = 'appCfg';
@@ -140,7 +139,11 @@ skeletonPwa.factory('loadcfg', function(container) {
         appCfg.$value = Object.assign({reloadcfg: () => cfgprop.then(d => d)}, cfg, config);
         container.$register(appCfg);
         }).catch((err) => {
-          throw new Error(err);
+            const appCfg = {};
+            appCfg.$name = 'appCfg';
+            appCfg.$type = 'constant';
+            appCfg.$value = Object.assign({reloadcfg: () => cfgprop.then(d => d)}, cfg);
+          container.$register(appCfg);
         });
     };
 });
