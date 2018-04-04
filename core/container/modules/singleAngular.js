@@ -67,7 +67,14 @@ function mount(opts, mountedInstances) {
 			}
 
 			if (opts.strictDi) {
-				mountedInstances.instance = opts.angular.bootstrap(bootstrapEl, [opts.mainAngularModule], {strictDi: opts.strictDi});
+				try {
+				 mountedInstances.instance = opts.angular.bootstrap(bootstrapEl, [opts.mainAngularModule], {strictDi: opts.strictDi});
+				} catch(err) {
+			     console.warn(err);
+				 setTimeout( function() {
+				 mountedInstances.instance = opts.angular.bootstrap(bootstrapEl, [opts.mainAngularModule], {strictDi: opts.strictDi});
+				 }, 100);
+				}
 			} else {
 				mountedInstances.instance = opts.angular.bootstrap(bootstrapEl, [opts.mainAngularModule]);
 			}
