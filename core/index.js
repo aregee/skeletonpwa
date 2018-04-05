@@ -52,6 +52,7 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
   _app.singleSpaReact = singleSpaReact;
   _app.components = {};
   _app.config = () => _app.core.container.appCfg;
+  _app.ngmodules = () => _app.core.container.ngmodules;
   _app.element = domApi(skeletonconfig.elements);
   _app.utils.api = apiFactory(skeletonconfig.api);
   _app.utils.viewContainer = $document.querySelector(viewContainer);
@@ -145,6 +146,23 @@ skeletonPwa.factory('loadcfg', function(container) {
     };
 });
 
+skeletonPwa.factory('loadngModules', function(container) {
+  return (cfg, http) => {
+      let api = http(cfg.api);
+      let cfgprop = api.get(cfg.angularModules);
+      const appCfg = {};
+      appCfg.$name = 'ngmodules';
+      appCfg.$type = 'constant';
+      cfgprop.then((list) => {
+        appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, {modules: list});
+        container.$register(appCfg);
+      }).catch((err) => {
+        appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, {modules: []});
+        container.$register(appCfg);
+      });
+  };
+});
+
 
 skeletonEngine.bootstrap = function(name, config) {
   if (config) {
@@ -160,6 +178,7 @@ skeletonEngine.bootstrap = function(name, config) {
         const state = container.state;
         container.uirouter(state, skeletonConfig);
         container.loadcfg(skeletonConfig, apiFactory);
+        container.loadngModules(skeletonConfig, apiFactory);
         const datastore = {};
         datastore.$name = 'datastore';
         datastore.$type = 'service';

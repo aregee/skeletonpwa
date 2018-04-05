@@ -49,10 +49,6 @@ export const GenericView = (superclass) => class extends superclass {
     return this.template;
   }
 
-  componentDidUpdate() {
-    // this.app.vent.on([this.viewClassName, 'state', 'update'].join('.'), this.listener.bind(this));
-  }
-
   createFirstTemplate() {
     return this.dom.div({
       className: this.viewClassName

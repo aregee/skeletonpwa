@@ -26,6 +26,10 @@ export class View {
 
   }
 
+  componentDidUnmount() {
+
+  }
+  
   render(renderFunc) {
     if (!!this.template.parentElement) {
       let newTemplate = renderFunc ? renderFunc() : this.createTemplate();
