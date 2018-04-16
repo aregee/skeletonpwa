@@ -5,8 +5,6 @@
   "main": "bundle/index.js",
   "scripts": {
     "prod": "export NODE_SHELL_ENV=production && ./node_modules/webpack/bin/webpack.js --config webpack.config.js --progress ",
-    "serve": "export NODE_SHELL_ENV=production && webpack-dev-server --progress --inline --port 8080 --config webpack.skeleton.config.js",
-    "build-sw": "node sw-build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

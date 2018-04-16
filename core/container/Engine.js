@@ -1,6 +1,6 @@
 import {
   AppShell
-} from './LazyContainer';
+} from 'ioc';
 import {
   Vent
 } from './modules';

@@ -18,7 +18,7 @@ import {
 
 import {
   mix
-} from './mixin';
+} from 'ioc';
 
 import singleSpaMithril from './singleMithril';
 
