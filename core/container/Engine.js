@@ -1,6 +1,6 @@
 import {
   AppShell
-} from 'ioc';
+} from 'lazyioc';
 import {
   Vent
 } from './modules';
