@@ -136,16 +136,35 @@ skeletonPwa.factory('loadcfg', function(container) {
         const appCfg = {};
         appCfg.$name = 'appCfg';
         appCfg.$type = 'constant';
+        const siteprefix = {};
+        siteprefix.$name = 'siteprefix';
+        siteprefix.$type = 'factory';
+        const baseuri = () => cfg.prefixSite;
+        const buildUri = function(container) {
+          return (uri) => {
+            let startToken = uri[0];
+            
+            if (baseuri() === startToken) {
+              return uri;
+            }
+            return `${baseuri()}${uri}`;
+           }
+        }
+        siteprefix.$value = buildUri;
         cfgprop.then((config) => {
           appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, cfg, config);
           container.$register(appCfg);
+          container.$register(siteprefix);
         }).catch((err) => {
           appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, cfg);
           container.$register(appCfg);
+          container.$register(siteprefix);
         });
     };
 });
 
+
+// datashopApp.shell('datashop').factory('siteprefix', buildUri);
 skeletonPwa.factory('loadngModules', function(container) {
   return (cfg, http) => {
       let api = http(cfg.api);
