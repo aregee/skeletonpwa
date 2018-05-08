@@ -10,26 +10,61 @@ window.skeletonPwa = skeletonPwa;
 window.skeletonEngine = skeletonEngine;
 
 skeletonPwa.factory('coreApi', function (container) {
+  const deps = [];
   let addProvider = (app, name, providerFunc) => {
-    return app.provider(name, providerFunc);
+    let provider = new Promise((resolve, reject) => {
+      app.provider(name, providerFunc);
+      resolve();
+    });
+    deps.push(provider);
+    return app;
   }
 
-  let addService = (app, name, providerFunc) => {
-    return app.provider(name, providerFunc);
+  let addService = (app, name, serviceFunc) => {
+    let service = new Promise((resolve, reject) => {
+      app.service(name, serviceFunc);
+      resolve();
+    });
+    deps.push(service);
+    return app;
   }
   let addFactory = (app, name, factoryFunc) => {
-    return app.factory(name, factoryFunc);
+    let factory = new Promise((resolve, reject) => {
+      app.factory(name, factoryFunc);
+      resolve();
+    });
+    deps.push(factory);
+    return app;
   }
+
   let addConstant = (app, name, constantFunc) => {
-    return app.constant(name, constantFunc);
+    let constant = new Promise((resolve, reject) => {
+
+      app.constant(name, constantFunc);
+      resolve();
+    });
+    deps.push(constant);
+    return app;
   }
+
   let addValue = (app, name, valueFunc) => {
-    return app.value(name, valueFunc);
+    let value = new Promise((resolve, reject) => {
+      app.value(name, valueFunc);
+      resolve();
+    });
+    deps.push(value);
+    return app;
   }
 
   let addMiddleWare = (app, name, middlewareFunc) => {
-    return app.middleware(name, middlewareFunc);
+     let middleware = new Promise((resolve, reject) => {
+      app.value(name, middlewareFunc);
+      resolve();
+    });
+    deps.push(middleware);
+    return app;
   }
+  
   let api = {};
   api.provider = addProvider.bind(null, skeletonPwa);
   api.service = addService.bind(null, skeletonPwa);
@@ -37,6 +72,9 @@ skeletonPwa.factory('coreApi', function (container) {
   api.middleware = addMiddleWare.bind(null, skeletonPwa);
   api.value = addValue.bind(null, skeletonPwa);
   api.constant = addConstant.bind(null, skeletonPwa);
+  api.resolveAll = () => {
+     return Promise.all(deps);
+  };
   return api;
 });
 
@@ -184,27 +222,31 @@ skeletonPwa.factory('loadngModules', function(container) {
 
 
 skeletonEngine.bootstrap = function(name, config) {
+  let skeletonApi = skeletonPwa.core.container.coreApi;
+
   if (config) {
     let skeletonConfig = config;
-    
-    skeletonPwa.provider(name, function() {
+    skeletonApi.resolveAll()
+    .then(() => {
+      skeletonPwa.provider(name, function() {
 
-      this.$get = function(container) {
-        const $document = container.$document;
-        const apiFactory = container.http;
-        const domApi = container.$createElement;
-        const $window = container.$window;
-        const state = container.state;
-        container.uirouter(state, skeletonConfig);
-        container.loadcfg(skeletonConfig, apiFactory);
-        container.loadngModules(skeletonConfig, apiFactory);
-        const datastore = {};
-        datastore.$name = 'datastore';
-        datastore.$type = 'service';
-        datastore.$value = Map;
-        container.$register(datastore);
-        return new CoreApp(skeletonPwa, skeletonConfig, $document, state, domApi, apiFactory, container.datastore, container.coreApi, container.singleSpa, container.singleSpaReact);
-      }
+        this.$get = function(container) {
+          const $document = container.$document;
+          const apiFactory = container.http;
+          const domApi = container.$createElement;
+          const $window = container.$window;
+          const state = container.state;
+          container.uirouter(state, skeletonConfig);
+          container.loadcfg(skeletonConfig, apiFactory);
+          container.loadngModules(skeletonConfig, apiFactory);
+          const datastore = {};
+          datastore.$name = 'datastore';
+          datastore.$type = 'service';
+          datastore.$value = Map;
+          container.$register(datastore);
+          return new CoreApp(skeletonPwa, skeletonConfig, $document, state, domApi, apiFactory, container.datastore, container.coreApi, container.singleSpa, container.singleSpaReact);
+        }
+      });
     });
     return this;
   }
