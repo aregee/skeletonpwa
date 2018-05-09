@@ -64,7 +64,7 @@ skeletonPwa.factory('coreApi', function (container) {
     deps.push(middleware);
     return app;
   }
-  
+
   let api = {};
   api.provider = addProvider.bind(null, skeletonPwa);
   api.service = addService.bind(null, skeletonPwa);
@@ -163,6 +163,7 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
   let coreapi = Object.assign({}, core, coreApi);
   return coreapi;
 }
+
 skeletonPwa.factory('uirouter', function(container) {
     return (state, config) => state.initRouter(config.routes, config.routeConfig);
 });
@@ -191,18 +192,17 @@ skeletonPwa.factory('loadcfg', function(container) {
         siteprefix.$value = buildUri;
         cfgprop.then((config) => {
           appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, cfg, config);
-          container.$register(appCfg);
-          container.$register(siteprefix);
+          container.coreApi.constant('appCfg', appCfg.$value);
+          container.coreApi.factory('siteprefix', buildUri);
         }).catch((err) => {
           appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, cfg);
-          container.$register(appCfg);
-          container.$register(siteprefix);
+          container.coreApi.constant('appCfg', appCfg.$value);
+          container.coreApi.factory('siteprefix', buildUri);
         });
     };
 });
 
 
-// datashopApp.shell('datashop').factory('siteprefix', buildUri);
 skeletonPwa.factory('loadngModules', function(container) {
   return (cfg, http) => {
       let api = http(cfg.api);
@@ -222,14 +222,14 @@ skeletonPwa.factory('loadngModules', function(container) {
 
 
 skeletonEngine.bootstrap = function(name, config) {
-  let skeletonApi = skeletonPwa.core.container.coreApi;
-
+  let skeletonApi = skeletonPwa.container.coreApi;
   if (config) {
     let skeletonConfig = config;
-    skeletonApi.resolveAll()
+    skeletonPwa.container.loadcfg(skeletonConfig, skeletonPwa.container.http);
+    skeletonPwa.container.loadngModules(skeletonConfig, skeletonPwa.container.http);
+    return skeletonApi.resolveAll()
     .then(() => {
       skeletonPwa.provider(name, function() {
-
         this.$get = function(container) {
           const $document = container.$document;
           const apiFactory = container.http;
@@ -237,8 +237,6 @@ skeletonEngine.bootstrap = function(name, config) {
           const $window = container.$window;
           const state = container.state;
           container.uirouter(state, skeletonConfig);
-          container.loadcfg(skeletonConfig, apiFactory);
-          container.loadngModules(skeletonConfig, apiFactory);
           const datastore = {};
           datastore.$name = 'datastore';
           datastore.$type = 'service';
@@ -248,7 +246,7 @@ skeletonEngine.bootstrap = function(name, config) {
         }
       });
     });
-    return this;
+    // return this;
   }
   return skeletonPwa.container[name];
 }
