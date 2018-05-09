@@ -65,6 +65,16 @@ skeletonPwa.factory('coreApi', function (container) {
     return app;
   }
 
+  let destroy = name => {
+    return new Promise((resolve, rejct) => {
+      if (skeletonPwa.container[name]) {
+        delete skeletonPwa.container[name];
+        resolve();
+      }
+      rejct('Shell not bootstraped yet');
+    });
+  };
+
   let api = {};
   api.provider = addProvider.bind(null, skeletonPwa);
   api.service = addService.bind(null, skeletonPwa);
@@ -75,6 +85,7 @@ skeletonPwa.factory('coreApi', function (container) {
   api.resolveAll = () => {
      return Promise.all(deps);
   };
+  api.destroy = destroy;
   return api;
 });
 
