@@ -186,30 +186,15 @@ skeletonPwa.factory('loadcfg', function(container) {
         const appCfg = {};
         appCfg.$name = 'appCfg';
         appCfg.$type = 'constant';
-        const siteprefix = {};
-        siteprefix.$name = 'siteprefix';
-        siteprefix.$type = 'factory';
-        const baseuri = () => cfg.prefixSite;
-        const buildUri = function(container) {
-          return (uri) => {
-            let startToken = uri[0];
-            
-            if (baseuri() === startToken) {
-              return uri;
-            }
-            return `${baseuri()}${uri}`;
-           }
-        }
-        siteprefix.$value = buildUri;
         cfgprop.then((config) => {
           appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, cfg, config);
           container.coreApi.constant('appCfg', appCfg.$value);
-          container.coreApi.factory('siteprefix', buildUri);
+          // container.coreApi.factory('siteprefix', buildUri);
         }).catch((err) => {
           appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, cfg);
           container.coreApi.constant('appCfg', appCfg.$value);
-          container.coreApi.factory('siteprefix', buildUri);
-        });
+          // container.coreApi.factory('siteprefix', buildUri);
+    });
     };
 });
 
@@ -236,6 +221,18 @@ skeletonEngine.bootstrap = function(name, config) {
   let skeletonApi = skeletonPwa.container.coreApi;
   if (config) {
     let skeletonConfig = config;
+    const baseuri = () => skeletonConfig.prefixSite;
+    const buildUri = function(container) {
+      return (uri) => {
+        let startToken = uri[0];
+        
+        if (baseuri() === startToken) {
+          return uri;
+        }
+        return `${baseuri()}${uri}`;
+       }
+    };
+    skeletonPwa.factory('siteprefix', buildUri);
     skeletonPwa.container.loadcfg(skeletonConfig, skeletonPwa.container.http);
     skeletonPwa.container.loadngModules(skeletonConfig, skeletonPwa.container.http);
     return skeletonApi.resolveAll()
