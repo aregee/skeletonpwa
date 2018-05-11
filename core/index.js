@@ -11,6 +11,8 @@ window.skeletonEngine = skeletonEngine;
 
 skeletonPwa.factory('coreApi', function (container) {
   const deps = [];
+  const runtimes = [];
+  const instanceWaiters = [];
   let addProvider = (app, name, providerFunc) => {
     let provider = new Promise((resolve, reject) => {
       app.provider(name, providerFunc);
@@ -74,7 +76,9 @@ skeletonPwa.factory('coreApi', function (container) {
       rejct('Shell not bootstraped yet');
     });
   };
-
+  let addRuntime = cb => {
+    runtimes.push(cb);
+  };
   let api = {};
   api.provider = addProvider.bind(null, skeletonPwa);
   api.service = addService.bind(null, skeletonPwa);
@@ -86,6 +90,28 @@ skeletonPwa.factory('coreApi', function (container) {
      return Promise.all(deps);
   };
   api.destroy = destroy;
+  api.run = addRuntime;
+  api.runAll = (app) => {
+    let runtimed = (instance) => runtime => {
+      return new Promise(function (resolve, reject) {
+        console.log(instance);
+        console.log(runtime);
+        resolve(runtime(instance.app));
+      });
+    };
+    let runtimeProp = runtimed(app);
+    let times = runtimes.reduce((all, runtime) => {
+      all.push(runtimeProp(runtime));
+      return all;
+    }, []);
+    // instanceWaiters.push(runtime(app));
+
+    return Promise.all(times)
+    .then(d => {
+      console.log(d);
+      return Promise.resolve(app);
+    });
+  };
   return api;
 });
 
@@ -162,16 +188,19 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
   _app.utils.reduceParams = reduceParams(baseReduce);
 
   function run(cb) {
-    cb(this.app);
-    this.app.vent.emit('engineLoaded', name, this.app);
+    coreApi.run(cb);
   }
-
   let core = {
     app: _app
   };
   core.run = run.bind(core);
   console.log(coreApi);
   let coreapi = Object.assign({}, core, coreApi);
+  // _app.vent.on('engineLoaded', () => {
+  //   coreApi.runAll(core.app);
+  // });
+  
+  
   return coreapi;
 }
 
@@ -186,19 +215,18 @@ skeletonPwa.factory('loadcfg', function(container) {
         const appCfg = {};
         appCfg.$name = 'appCfg';
         appCfg.$type = 'constant';
-        cfgprop.then((config) => {
+        return cfgprop.then((config) => {
           appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, cfg, config);
-          container.coreApi.constant('appCfg', appCfg.$value);
-          // container.coreApi.factory('siteprefix', buildUri);
+          return Promise.resolve(skeletonPwa.constant('appCfg', appCfg.$value));
         }).catch((err) => {
           appCfg.$value = Object.assign({reload: () => cfgprop.then(d => d)}, cfg);
-          container.coreApi.constant('appCfg', appCfg.$value);
-          // container.coreApi.factory('siteprefix', buildUri);
-    });
+          return Promise.resolve(skeletonPwa.constant('appCfg', appCfg.$value));
+        });
     };
 });
 
 
+skeletonPwa.service('datastore', Map);
 skeletonPwa.factory('loadngModules', function(container) {
   return (cfg, http) => {
       let api = http(cfg.api);
@@ -233,9 +261,11 @@ skeletonEngine.bootstrap = function(name, config) {
        }
     };
     skeletonPwa.factory('siteprefix', buildUri);
-    skeletonPwa.container.loadcfg(skeletonConfig, skeletonPwa.container.http);
     skeletonPwa.container.loadngModules(skeletonConfig, skeletonPwa.container.http);
-    return skeletonApi.resolveAll()
+    return skeletonPwa.container.loadcfg(skeletonConfig, skeletonPwa.container.http)
+    .then((shell) => {
+      return skeletonApi.resolveAll();
+    })
     .then(() => {
       skeletonPwa.provider(name, function() {
         this.$get = function(container) {
@@ -245,14 +275,11 @@ skeletonEngine.bootstrap = function(name, config) {
           const $window = container.$window;
           const state = container.state;
           container.uirouter(state, skeletonConfig);
-          const datastore = {};
-          datastore.$name = 'datastore';
-          datastore.$type = 'service';
-          datastore.$value = Map;
-          container.$register(datastore);
           return new CoreApp(skeletonPwa, skeletonConfig, $document, state, domApi, apiFactory, container.datastore, container.coreApi, container.singleSpa, container.singleSpaReact);
         }
       });
+      // skeletonPwa.container.$window[name] = skeletonPwa.container[name];
+      return skeletonApi.runAll(skeletonPwa.container[name]);
     });
     // return this;
   }
