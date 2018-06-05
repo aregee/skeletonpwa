@@ -2,7 +2,7 @@ import {
   GenericView,
   View,
   VentView
-} from './mixins';
+} from 'webtoolkit';
 
 
 

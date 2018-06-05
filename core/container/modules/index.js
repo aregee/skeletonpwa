@@ -10,7 +10,7 @@ import {
 
 import {
   Vent
-} from './eventbus';
+} from 'webtoolkit';
 
 import {
   supportComponents

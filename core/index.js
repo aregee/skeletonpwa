@@ -129,7 +129,7 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
   _app.config = () => _app.core.container.appCfg;
   _app.ngmodules = () => _app.core.container.ngmodules;
   _app.element = domApi(skeletonconfig.elements);
-  _app.utils.api = apiFactory(skeletonconfig.api);
+  _app.utils.api = new apiFactory({apiBase: skeletonconfig.api});
   _app.utils.viewContainer = $document.querySelector(viewContainer);
   _app.components.views = new Map();
   _app.vent = skeletonpwa.vent;
@@ -210,7 +210,7 @@ skeletonPwa.factory('uirouter', function(container) {
 
 skeletonPwa.factory('loadcfg', function(container) {
     return (cfg, http) => {
-        let api = http(cfg.api);
+        let api = new http({apiBase: cfg.api });
         let cfgprop = api.get(cfg.publicConfig);
         const appCfg = {};
         appCfg.$name = 'appCfg';
@@ -229,7 +229,7 @@ skeletonPwa.factory('loadcfg', function(container) {
 skeletonPwa.service('datastore', Map);
 skeletonPwa.factory('loadngModules', function(container) {
   return (cfg, http) => {
-      let api = http(cfg.api);
+      let api = new http({apiBase: cfg.api});
       let cfgprop = api.get(cfg.angularModules);
       const appCfg = {};
       appCfg.$name = 'ngmodules';
