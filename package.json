@@ -43,6 +43,6 @@
     "single-spa-react": "^2.0.4",
     "universal-router": "6.0.0",
     "lazyioc": "^1.0.1",
-    "webtoolkit": "^1.0.0"
+    "webtoolkit": "^1.0.2"
   }
 }
