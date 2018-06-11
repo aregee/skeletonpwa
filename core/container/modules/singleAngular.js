@@ -11,6 +11,27 @@ const defaultOpts = {
 	strictDi: false,
 	template: undefined,
 };
+const appManager = new function () {
+    this.currentAppName;
+    this.currentApp;
+
+    this.startApp = function (bootstrapel,{mainAngularModule , angular, strictDi}) {
+        if (this.currentApp) {
+            this.destroyApp(this.currentApp, this.currentAppName);
+        }
+        var appContainer = bootstrapel;
+        if (appContainer) {
+            this.currentAppName = mainAngularModule;
+            this.currentApp = angular.bootstrap(appContainer, [mainAngularModule], {strictDi: strictDi});
+		}
+		return this.currentApp;
+    }
+
+    this.destroyApp = function (app, appName) {
+        var $rootScope = app.get('$rootScope');
+        $rootScope.$destroy();
+    }
+}
 
 export default function singleSpaAngular1(userOpts) {
 	if (typeof userOpts !== 'object') {
@@ -48,6 +69,8 @@ function bootstrap(opts) {
 	return Promise.resolve();
 }
 
+
+
 function mount(opts, mountedInstances) {
 	return Promise
 		.resolve()
@@ -65,30 +88,19 @@ function mount(opts, mountedInstances) {
 			if (opts.template) {
 				bootstrapEl.innerHTML = opts.template;
 			}
-
-			if (opts.strictDi) {
-				try {
-				 mountedInstances.instance = opts.angular.bootstrap(bootstrapEl, [opts.mainAngularModule], {strictDi: opts.strictDi});
-				} catch(err) {
-			     console.warn(err);
-				 setTimeout( function() {
-				 mountedInstances.instance = opts.angular.bootstrap(bootstrapEl, [opts.mainAngularModule], {strictDi: opts.strictDi});
-				 }, 100);
-				}
-			} else {
-				mountedInstances.instance = opts.angular.bootstrap(bootstrapEl, [opts.mainAngularModule]);
-			}
+			mountedInstances.instance = appManager.startApp(bootstrapEl, opts);
 	});
 }
 
 function unmount(opts, mountedInstances) {
+	console.log(mountedInstances)
 	return new Promise((resolve, reject) => {
-		mountedInstances.instance.get('$rootScope').$destroy();
-		getContainerEl(opts).innerHTML = '';
-
+		console.log(mountedInstances, opts);
+		appManager.destroyApp(mountedInstances.instance, opts.mainAngularModule);
+		// delete mountedInstances.instance
+		// getContainerEl(opts).innerHTML = '';
 		if (opts.angular === window.angular && !opts.preserveGlobal)
 			delete window.angular;
-
 		setTimeout(resolve);
 	});
 }
