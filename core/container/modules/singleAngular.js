@@ -15,14 +15,22 @@ const appManager = new function () {
     this.currentAppName;
     this.currentApp;
 
-    this.startApp = function (bootstrapel,{mainAngularModule , angular, strictDi}) {
+    this.startApp = function (bootstrapel,{mainAngularModule , angular, strictDi, elementId}) {
         if (this.currentApp) {
             this.destroyApp(this.currentApp, this.currentAppName);
-        }
-        var appContainer = bootstrapel;
+		}
+        var appContainer = document.getElementById(elementId);
         if (appContainer) {
-            this.currentAppName = mainAngularModule;
-            this.currentApp = angular.bootstrap(appContainer, [mainAngularModule], {strictDi: strictDi});
+			this.currentAppName = mainAngularModule;
+			let $this = this;
+			try {
+            	$this.currentApp = angular.bootstrap(appContainer, [mainAngularModule], {strictDi: strictDi});
+			} catch (error) {
+				console.log(error);
+				setTimeout(() => {	
+				 $this.currentApp = angular.bootstrap(appContainer, [mainAngularModule], {strictDi: strictDi});
+				},20);
+			}
 		}
 		return this.currentApp;
     }
