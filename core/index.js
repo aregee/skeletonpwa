@@ -126,6 +126,13 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
   _app.singleSpa = singleSpa;
   _app.singleSpaReact = singleSpaReact;
   _app.components = {};
+  _app.module = (moduleName) => {
+    if(_app.core.container.$list().indexOf(moduleName) > -1 ) {
+      return _app.core.container[moduleName];
+    } else {
+      throw new Error(`${moduleName} not injected in the shell, please inject the dependency and try again`);
+    }
+  };
   _app.config = () => _app.core.container.appCfg;
   _app.ngmodules = () => _app.core.container.ngmodules;
   _app.element = domApi(skeletonconfig.elements);
