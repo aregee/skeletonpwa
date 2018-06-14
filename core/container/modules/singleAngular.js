@@ -101,12 +101,9 @@ function mount(opts, mountedInstances) {
 }
 
 function unmount(opts, mountedInstances) {
-	console.log(mountedInstances)
 	return new Promise((resolve, reject) => {
 		console.log(mountedInstances, opts);
 		appManager.destroyApp(mountedInstances.instance, opts.mainAngularModule);
-		// delete mountedInstances.instance
-		// getContainerEl(opts).innerHTML = '';
 		if (opts.angular === window.angular && !opts.preserveGlobal)
 			delete window.angular;
 		setTimeout(resolve);

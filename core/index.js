@@ -94,8 +94,6 @@ skeletonPwa.factory('coreApi', function (container) {
   api.runAll = (app) => {
     let runtimed = (instance) => runtime => {
       return new Promise(function (resolve, reject) {
-        console.log(instance);
-        console.log(runtime);
         resolve(runtime(instance.app));
       });
     };
@@ -104,11 +102,9 @@ skeletonPwa.factory('coreApi', function (container) {
       all.push(runtimeProp(runtime));
       return all;
     }, []);
-    // instanceWaiters.push(runtime(app));
 
     return Promise.all(times)
     .then(d => {
-      console.log(d);
       return Promise.resolve(app);
     });
   };
@@ -154,7 +150,6 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
 
   let urlParams = (params = []) => (scope) => {
     return params.reduce((all, t) => {
-      //     console.log(all.tpl())
       if (all.val === '') {
         all.val = all.val + all.tpl() + t;
         return all;
@@ -211,12 +206,7 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
     app: _app
   };
   core.run = run.bind(core);
-  console.log(coreApi);
   let coreapi = Object.assign({}, core, coreApi);
-  // _app.vent.on('engineLoaded', () => {
-  //   coreApi.runAll(core.app);
-  // });
-  
   
   return coreapi;
 }
