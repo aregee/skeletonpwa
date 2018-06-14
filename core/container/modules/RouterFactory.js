@@ -20,8 +20,8 @@ export const supportRouterFactory = (ProgressiveEngine) => {
       return this;
     }
 
-    route(url) {
-      return this.universalrouter.resolve(url);
+    route(url, context={}) {
+      return this.universalrouter.resolve({pathname: url, ...context});
     }
 
     genUrl(state, props, routerprops) {

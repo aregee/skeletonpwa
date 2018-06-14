@@ -182,17 +182,27 @@ const CoreApp = function AppService(skeletonpwa, skeletonconfig, $document, stat
     return ocom;
   }
 
-  let reduceParams = (base) => (params) => {
-    //  @parms({args: temp1[1], url: 'foo' })
-    return params.url + base(params.args).reduce(function(res, obj) {
-      if (obj.val === null || obj.key === '') {
-        return res;
-      }
-      return res + '?' + '&' + obj.key + '=' + obj.val;
-    }, '');
+   let queryProp = {
+    stringifyQueryParams(params) {
+      return Object.keys(params)
+        .reduce((all, key) => {
+          if(key === '') {
+            return all;
+          }
+          if (params[key] !== null && params[key] !== '') {
+            all.push(`${key}=${params[key]}`);
+          }
+          return all;
+        }, [])
+        .join('&');
+    }
   };
 
-  _app.utils.reduceParams = reduceParams(baseReduce);
+  let reduceParams =({stringifyQueryParams}) => ({url, args}) => {
+    //  @parms({args: temp1[1], url: 'foo' })
+    return stringifyQueryParams(args) !== ''? `${url}?${stringifyQueryParams(args)}` : url;
+  };
+  _app.utils.reduceParams = reduceParams(queryProp);
 
   function run(cb) {
     coreApi.run(cb);
