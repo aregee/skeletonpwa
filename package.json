@@ -39,7 +39,7 @@
     "webpack-dev-server": "^1.16.5"
   },
   "dependencies": {
-    "lazyioc": "^1.0.1",
+    "lazyioc": "^1.0.2-0",
     "single-spa": "^3.5.0",
     "single-spa-react": "^2.0.4",
     "universal-router": "6.0.0",

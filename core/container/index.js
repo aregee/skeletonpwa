@@ -77,7 +77,7 @@ supportComponents(ProgressiveEngine);
 supportVent(ProgressiveEngine);
 supportSingleSpas(ProgressiveEngine);
 
-const skeletonPwa = new ProgressiveEngine();
+const skeletonPwa = new ProgressiveEngine('skeleton');
 
 export {
   skeletonPwa,
