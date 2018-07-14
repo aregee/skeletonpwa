@@ -3,6 +3,8 @@ const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const isProd = process.env.NODE_SHELL_ENV === 'production';
 
+const BundleAnalyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const devtool = isProd ?
   'source-map' :
   'cheap-module-eval-source-map';
@@ -77,7 +79,8 @@ if (isProd) {
       output: {
         comments: false,
       },
-    })
+    }),
+    new BundleAnalyzer()
   );
 }
 

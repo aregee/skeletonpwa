@@ -1,12 +1,12 @@
 import {
-  AppShell
+  LazyIoc
 } from 'lazyioc';
 import {
   Vent
 } from './modules';
 
 
-export class ProgressiveEngine extends AppShell {
+export class ProgressiveEngine extends LazyIoc {
   constructor(name) {
     super(name);
     if (this.active) {

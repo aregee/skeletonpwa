@@ -5,7 +5,6 @@ import {
 import {
   supportDomApi,
   supportApi,
-  supportRouterFactory,
   supportComponents,
   singleSpaMithril,
   singleSpaAngular1,
@@ -71,7 +70,6 @@ const supportSingleSpas = (Engine) => {
 };
 
 supportDomApi(ProgressiveEngine);
-supportRouterFactory(ProgressiveEngine);
 supportApi(ProgressiveEngine);
 supportComponents(ProgressiveEngine);
 supportVent(ProgressiveEngine);
