@@ -1,20 +1,36 @@
 import { skeletonPwa, Vent } from "./container";
 import { coreApiFactory } from "./api";
-import { appfactory } from './app.factory';
+import { appfactory } from "./app.factory";
 import { configFactory } from "./config.factory";
 import { RouterService } from "./Router";
 import { Dom } from "./Dom";
 import { apiFactory } from "./apiFactory";
 import { buildUri } from "./buildUri";
 
+import {
+  apiUtils,
+  viewContainerUtils,
+  stringifyQueryUtils,
+  pageurlUtils
+} from "./app.utils";
+
 const skeletonEngine = {};
 window.skeletonPwa = skeletonPwa;
 window.skeletonEngine = skeletonEngine;
 
-
 skeletonPwa.register(Dom);
 
 skeletonPwa.register(RouterService);
+
+// skeletonPwa.register(Utils);
+
+skeletonPwa.register(apiUtils);
+
+skeletonPwa.register(viewContainerUtils);
+
+skeletonPwa.register(pageurlUtils);
+
+skeletonPwa.register(stringifyQueryUtils);
 
 skeletonPwa.register(apiFactory);
 
@@ -30,7 +46,7 @@ skeletonPwa.factory("skeletonpwa", function() {
   return skeletonPwa;
 });
 
-skeletonEngine.bootstrap = function(name, config) {
+skeletonEngine.bootstrap = function(name, config, dependencies = []) {
   let skeletonApi = skeletonPwa.container.coreApi;
   if (config) {
     let skeletonConfig = config;
@@ -42,23 +58,20 @@ skeletonEngine.bootstrap = function(name, config) {
         return skeletonApi.resolveAll();
       })
       .then(() => {
-        skeletonPwa.serviceFactory(
-          name,
-          appfactory,
+        let deps = [
           "skeletonpwa",
-          "skeletonConfig",
-          "$document",
-          "api",
           "dom",
-          "$window",
           "state",
           "datastore",
           "coreApi",
-          "singleSpa",
-          "singleSpaReact",
           "appCfg",
-          "vent"
-        );
+          "vent", 
+          "Utils"
+        ].concat(dependencies);
+        appfactory.$name = name;
+        appfactory.$type = 'serviceFactory';
+        appfactory.$inject = deps;
+        skeletonPwa.register(appfactory);
         return skeletonApi.runAll(skeletonPwa.container[name]);
       });
   }

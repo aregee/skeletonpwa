@@ -5,6 +5,7 @@ export class RouterService {
   constructor(config) {
     this.routes = config.routes ? config.routes : [];
     this.url = router => props => generateUrls(router, props);
+    console.log(config.routeConfig);
     this.opts = config.routeConfig;
     this.universalrouter = new UniversalRouter(this.routes, this.opts);
     this.genurl = this.url(this.universalrouter);

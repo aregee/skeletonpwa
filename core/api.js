@@ -5,6 +5,8 @@ export const coreApiFactory = function(container) {
   const deps = [];
   const runtimes = [];
   const instanceWaiters = [];
+  const slice = Array.prototype.slice;
+  
   let addProvider = (app, name, providerFunc) => {
     let provider = new Promise((resolve, reject) => {
       app.provider(name, providerFunc);
@@ -16,26 +18,6 @@ export const coreApiFactory = function(container) {
   let addPackage = function(app, name, injects = []) {
     let addpackage = () =>
       new Promise((resolve, reject) => {
-        app.serviceFactory.apply(
-          app,
-          [
-            name,
-            appfactory,
-            "skeletonpwa",
-            "skeletonConfig",
-            "$document",
-            "api",
-            "dom",
-            "$window",
-            "state",
-            "datastore",
-            "coreApi",
-            "singleSpa",
-            "singleSpaReact",
-            "appCfg",
-            "vent"
-          ].concat(injects)
-        );
         resolve();
       });
     deps.push(addpackage());

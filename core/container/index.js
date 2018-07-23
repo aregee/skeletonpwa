@@ -12,8 +12,6 @@ import {
   mix
 } from './modules';
 
-import * as singleSpa from 'single-spa';
-import singleSpaReact from 'single-spa-react';
 
 
 ProgressiveEngine.instanceWaiters = [];
@@ -53,12 +51,6 @@ const supportSingleSpas = (Engine) => {
     resolve,
     reject
   }) => {
-    container.service('singleSpa', function () {
-      return singleSpa;
-    });
-    container.service('singleSpaReact', function () {
-      return singleSpaReact;
-    });
     container.service('singleSpaAngular', function () {
       return singleSpaAngular1;
     });
