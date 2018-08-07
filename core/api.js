@@ -4,7 +4,7 @@ import { appfactory } from "./app.factory";
 export const coreApiFactory = function(container) {
   const deps = [];
   const runtimes = [];
-  const instanceWaiters = [];
+  const digestRuntimes = [];
   const slice = Array.prototype.slice;
   
   let addProvider = (app, name, providerFunc) => {
@@ -104,12 +104,31 @@ export const coreApiFactory = function(container) {
       rejct("Shell not bootstraped yet");
     });
   };
+
+  let addProviderConfig = (app, serviceFactory, injects = []) => {
+    serviceFactory.$name = serviceFactory.$name ? serviceFactory.$name : app.id();
+    serviceFactory.$type = 'service';
+    serviceFactory.$inject = Array.isArray(serviceFactory.$inject)
+      ? serviceFactory.$inject
+      : [].concat(injects);
+    let service = new Promise((resolve, reject) => {
+        app.register(serviceFactory);
+      resolve();
+    });
+    deps.push(service);
+    const {$name} = serviceFactory;
+    digestRuntimes.push($name);
+    return app;
+  };
+
   let addRuntime = cb => {
     runtimes.push(cb);
   };
+
   skeletonPwa.component = addComponent.bind(null, skeletonPwa);
   skeletonPwa.componentFactory = addServiceFactory.bind(null, skeletonPwa);
   skeletonPwa.package = addPackage.bind(null, skeletonPwa);
+  skeletonPwa.defineConfig = addProviderConfig.bind(null, skeletonPwa);
   let api = {};
   api.provider = addProvider.bind(null, skeletonPwa);
   api.service = addService.bind(null, skeletonPwa);
@@ -121,6 +140,7 @@ export const coreApiFactory = function(container) {
   api.package = addPackage.bind(null, skeletonPwa);
   api.componentFactory = addServiceFactory.bind(null, skeletonPwa);
   api.component = addComponent.bind(null, skeletonPwa);
+  api.defineConfig = addProviderConfig.bind(null, skeletonPwa);
   api.resolveAll = () => {
     return Promise.all(deps);
   };
@@ -133,13 +153,24 @@ export const coreApiFactory = function(container) {
       });
     };
     let runtimeProp = runtimed(app);
+    
     let times = runtimes.reduce((all, runtime) => {
       all.push(runtimeProp(runtime));
       return all;
     }, []);
-
     return Promise.all(times).then(d => {
-      return Promise.resolve(app);
+      console.log('>>>here>>')
+      let runtimes = ()=> skeletonPwa.digest(digestRuntimes);
+      // console.log(results);
+      let appLoadCb = () => {
+        let results = runtimes();
+        app._runBlocks = results;
+        return app;
+      };
+      return Promise.resolve(appLoadCb);
+    })
+    .catch(err => {
+      console.error(err);
     });
   };
   return api;

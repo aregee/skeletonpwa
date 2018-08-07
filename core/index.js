@@ -6,15 +6,15 @@ import { RouterService } from "./Router";
 import { Dom } from "./Dom";
 import { apiFactory } from "./apiFactory";
 import { buildUri } from "./buildUri";
-import * as singleSpa from "single-spa";
-import singleSpaReact from "single-spa-react";
 
 import {
   apiUtils,
   viewContainerUtils,
   stringifyQueryUtils,
-  pageurlUtils
+  pageurlUtils,
+  find
 } from "./app.utils";
+import { navigateToUrlFactory } from "./navigation";
 
 const skeletonEngine = {};
 window.skeletonPwa = skeletonPwa;
@@ -38,15 +38,17 @@ skeletonPwa.register(apiFactory);
 
 skeletonPwa.register(buildUri);
 
+skeletonPwa.register(find);
+
 skeletonPwa.register(coreApiFactory);
 
 skeletonPwa.register(configFactory);
 
-skeletonPwa.factory("singleSpa", function() {
+skeletonPwa.service("singleSpa", function() {
   return singleSpa;
 });
 
-skeletonPwa.factory("singleSpaReact", function() {
+skeletonPwa.service("singleSpaReact", function() {
   return singleSpaReact;
 });
 
@@ -55,6 +57,8 @@ skeletonPwa.service("datastore", Map);
 skeletonPwa.factory("skeletonpwa", function() {
   return skeletonPwa;
 });
+
+skeletonPwa.serviceFactory("navigateToUrl", navigateToUrlFactory, '$window');
 
 skeletonEngine.bootstrap = function(name, config, dependencies = []) {
   let skeletonApi = skeletonPwa.container.coreApi;
