@@ -41,8 +41,6 @@
   },
   "dependencies": {
     "lazyioc": "^2.0.2",
-    "single-spa": "^4.0.0",
-    "single-spa-react": "^2.0.4",
     "universal-router": "6.0.0",
     "webtoolkit": "^1.0.6"
   }
