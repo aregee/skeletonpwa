@@ -44,14 +44,6 @@ skeletonPwa.register(coreApiFactory);
 
 skeletonPwa.register(configFactory);
 
-skeletonPwa.service("singleSpa", function() {
-  return singleSpa;
-});
-
-skeletonPwa.service("singleSpaReact", function() {
-  return singleSpaReact;
-});
-
 skeletonPwa.service("datastore", Map);
 
 skeletonPwa.factory("skeletonpwa", function() {
