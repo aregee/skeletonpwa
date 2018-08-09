@@ -5,9 +5,6 @@ import {
 import {
   supportDomApi,
   supportApi,
-  supportComponents,
-  singleSpaMithril,
-  singleSpaAngular1,
   Vent,
   mix
 } from './modules';
@@ -46,26 +43,11 @@ const supportVent = (Engine) => {
   Engine.onInstance(onInstance);
 }
 
-const supportSingleSpas = (Engine) => {
-  const onInstance = (container, {
-    resolve,
-    reject
-  }) => {
-    container.service('singleSpaAngular', function () {
-      return singleSpaAngular1;
-    });
-    container.service('singleSpaMithril', function () {
-      return singleSpaMithril;
-    });
-  }
-  Engine.onInstance(onInstance);
-};
+
 
 supportDomApi(ProgressiveEngine);
 supportApi(ProgressiveEngine);
-supportComponents(ProgressiveEngine);
 supportVent(ProgressiveEngine);
-supportSingleSpas(ProgressiveEngine);
 
 const skeletonPwa = new ProgressiveEngine('skeleton');
 
