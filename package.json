@@ -43,6 +43,6 @@
   "dependencies": {
     "lazyioc": "^2.0.2",
     "universal-router": "6.0.0",
-    "webtoolkit": "2.0.0"
+    "webtoolkit": "2.1.5"
   }
 }
