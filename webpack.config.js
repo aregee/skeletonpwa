@@ -1,13 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
-const isProd = process.env.NODE_SHELL_ENV === 'production';
-
+const isProd = process.env.NODE_SHELL_ENV
+ === 'production';
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const devtool = isProd ?
-  'source-map' :
-  'cheap-module-eval-source-map';
+const devtool = isProd ? "" : "cheap-module-eval-source-map";
+const mode = isProd ? "production" : "development";
 
 const entry = {
   index: './core/index.js',
@@ -22,7 +22,7 @@ const output = {
 };
 
 const modules = {
-  loaders: [{
+  rules: [{
       test: /\.html$/,
       loader: 'html-loader'
     },
@@ -63,8 +63,17 @@ if (isProd) {
       minimize: true,
       debug: false
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
+  );
+}
+
+module.exports = {
+  devtool,
+  mode,
+  entry,
+  optimization: {
+    minimize: true,
+    minimizer: [new UglifyJsPlugin({
+      uglifyOptions: {
         warnings: false,
         screw_ie8: true,
         conditionals: true,
@@ -75,18 +84,11 @@ if (isProd) {
         evaluate: true,
         if_return: true,
         join_vars: true,
-      },
-      output: {
-        comments: false,
-      },
-    }),
-    new BundleAnalyzer()
-  );
-}
-
-module.exports = {
-  devtool,
-  entry,
+      }
+    })],
+    usedExports: true,
+    sideEffects: true
+  },
   output,
   module: modules,
   plugins

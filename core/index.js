@@ -24,8 +24,6 @@ skeletonPwa.register(Dom);
 
 skeletonPwa.register(RouterService);
 
-// skeletonPwa.register(Utils);
-
 skeletonPwa.register(apiUtils);
 
 skeletonPwa.register(viewContainerUtils);
