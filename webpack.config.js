@@ -58,11 +58,7 @@ if (isProd) {
       'process.env': {
         NODE_SHELL_ENV: JSON.stringify('production')
       }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false
-    }),
+    }) 
   );
 }
 

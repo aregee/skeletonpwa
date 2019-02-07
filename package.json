@@ -36,10 +36,10 @@
     "bundle-loader": "^0.5.5",
     "copy-webpack-plugin": "^4.0.1",
     "svg-url-loader": "^2.2.0",
-    "webpack": "^3.7.1",
+    "webpack": "^4.0.0",
     "uglifyjs-webpack-plugin": "^2.1.1",
     "webpack-bundle-analyzer": "^2.13.1",
-    "webpack-cli": "^3.2.1",
+    "webpack-cli": "^3.2.0",
     "webpack-dev-server": "^1.16.5"
   },
   "dependencies": {
