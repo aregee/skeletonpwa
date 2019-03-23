@@ -11,7 +11,7 @@ export const configFactory = function({ $register, skeletonConfig, http }) {
     let cfg = skeletonConfig;
     return cfgprop
       .then(config => {
-        appCfg.$name = "appCfg";
+        appCfg.$name = "instanceConfig";
         appCfg.$type = "constant";
         appCfg.$value = Object.assign(
           { reload: () => cfgprop.then(d => d) },
@@ -21,7 +21,7 @@ export const configFactory = function({ $register, skeletonConfig, http }) {
         return Promise.resolve($register(appCfg));
       })
       .catch(err => {
-        appCfg.$name = "appCfg";
+        appCfg.$name = "instanceConfig";
         appCfg.$type = "constant";
         appCfg.$value = Object.assign(
           { reload: () => cfgprop.then(d => d) },

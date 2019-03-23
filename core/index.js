@@ -24,8 +24,6 @@ skeletonPwa.register(Dom);
 
 skeletonPwa.register(RouterService);
 
-// skeletonPwa.register(Utils);
-
 skeletonPwa.register(apiUtils);
 
 skeletonPwa.register(viewContainerUtils);
@@ -57,7 +55,6 @@ skeletonEngine.bootstrap = function(name, config, dependencies = []) {
   if (config) {
     let skeletonConfig = config;
     skeletonPwa.constant("skeletonConfig", skeletonConfig);
-    // skeletonPwa.container.uirouter;
     return skeletonPwa.container
       .loadcfg()
       .then(shell => {
@@ -89,9 +86,8 @@ skeletonEngine.shell = function(name) {
   if (inst) {
     return inst;
   }
-  let api = skeletonPwa.container.coreApi;
-  return api;
-  // throw new Error(`${name} not init`);
+  const {coreApi} = skeletonPwa.container;
+  return coreApi;
 };
 
 export { skeletonPwa, skeletonEngine, Vent };
